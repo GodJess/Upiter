@@ -1,0 +1,178 @@
+body{
+    display: flex;
+    background: #F2F2F2;
+    align-items: center;
+    justify-content: center;
+  }
+  .block{
+    display: flex;
+    position: relative;
+    width: 1400px;
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .block-header{
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  h1{
+    color: #0D0D0D;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: fantasy;
+  }
+
+  .name{
+    display: flex;
+    width: 150px;
+    height: 30px;
+    font-size: 25px;
+    align-items: center;
+    color: black;
+  }
+
+  .main-block{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    flex-wrap: nowrap;
+  }
+  .block-reg{
+    display: flex;
+    position: relative;
+    width: 50%;
+    height: auto;
+    border-right: 2px solid black;
+    flex-wrap: wrap;
+  }
+  .block-logo{
+    display: flex;
+    width: 50%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(311deg, #0D0D0D 0%, #E5FF21 100%);
+  }
+  .logo{
+    display: flex;
+    width: 400px;
+    height: auto;
+    flex-wrap: nowrap;
+  }
+  .logo-img{
+    display: flex;
+    width: 100px;
+    height: 100px;
+  }
+  .logo-img img{
+    width: 100%;
+    height: 100%;
+  }
+  .logo-name{
+    display: flex;
+    width: 300px;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+  }
+  h5{
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    font-size: 85px;
+    color: #F2F2F2;
+    font-weight: 600;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  .prev{
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+  }
+  .block-input{
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .form{
+    display: flex;
+    width: 300px;
+    height: auto;
+    min-height: 350px;
+    flex-wrap: wrap;
+  }
+  .block-enter{
+    display: flex;
+    width: 100%;
+    margin-bottom: 60px;
+    border-bottom: 2px solid black ;
+    justify-content: flex-start;
+  }
+  .input{
+    width: 100%;
+    height: auto;
+    background-color: #F2F2F2;
+    border: none;
+    font-size: 25px;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .block-button{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+  }
+  .button{
+    border: none;
+    width: 120px;
+    height: 40px;
+    color: #000;
+    background: linear-gradient(311deg, #0D0D0D 0%, #E5FF21 100%);
+    font-size: 25px;
+    font-weight: 200;
+    font-family: fantasy;
+    transition: all 0.8s ease;
+
+  }
+  .button:hover{
+    background: #0D0D0D;
+    color: #E5FF21;
+  }
+  .backup{
+    position: absolute;
+    text-decoration: none;
+    list-style: none;
+    margin:10px 10px ;
+  }
+  .icon{
+    color: black;
+    height: 30px;
+    width: 50px;
+    transition: all .6s ease;
+  }
+  .backup:hover{
+    .icon{
+        color: red;
+    }
+  }
+  .error{
+    display: flex;
+    width: 100%;
+    height: auto;
+    font-size: 20px;
+    color: red;
+  }

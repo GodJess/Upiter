@@ -1,0 +1,72 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'main/slider.css' %}">
+  </head>
+  <body>
+      <div class="block">
+          <div class="block-header">
+              <h1>Upiter</h1>
+              <div class="button">
+                {% if length == 0%}
+                  <a href="{% url 'autoriz' %}" class="get-start">Get Started</a>
+                {% else %}
+                <a href="{% url 'upiter' %}" class="get-start">Continue</a>
+                {% endif %}
+              </div>
+          </div>
+          <div class="main-block">
+            <div class="upiter ">
+              <div class="upiter-block">
+                <div class="block-name">
+                    <div class="name-up ">
+                      <h2>Upiter</h2>
+                    </div>
+                    <div class="number-up ">
+                      <h2>01</h2>
+                    </div>
+                </div>
+                <div class="description-up ">
+                    <p>Banking app for self-employed, businessmen,freelancers</p>
+                </div>
+              </div>
+            </div>
+            <div class="mobile open">
+              <div class="upiter-block">
+                <div class="block-name">
+                  <div class="name-up-mob open">
+                    <h2>Upiter Mobile</h2>
+                  </div>
+                  <div class="number-up-mob open">
+                    <h2>02</h2>
+                  </div>
+              </div>
+              <div class="description-up-mob open">
+                  <p>Mobile operator, that allows you not to miss important things</p>
+              </div>
+            </div>
+          </div>
+            <div class="premium">
+              <div class="upiter-block">
+                <div class="block-name">
+                  <div class="name-up-prem">
+                    <h2>Upiter Premium</h2>
+                  </div>
+                  <div class="number-up-prem">
+                    <h2>03</h2>
+                  </div>
+              </div>
+              <div class="description-up-prem">
+                  <p>Premium subscription for those, who have few benefits.</p>
+              </div>
+            </div>
+            </div>
+          </div>
+      </div>
+      <script src="{% static 'main/slider.js' %}"></script>
+  </body>
+</html>

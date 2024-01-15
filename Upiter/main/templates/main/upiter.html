@@ -1,0 +1,552 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main/upiter.css' %}">
+    <link rel="stylesheet" href="{% static 'main/another.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    {% if length != 0 %}
+    <div class="model">
+        <div class="modal-box">
+            <h7 class="h7">Profile photo</h7></br>
+            <div class="box-main">
+                <div class="box1">
+                    {%for el in usersess%}<img src="{{el.photo}}" alt="">{% endfor%}
+                    {% comment %} <img src="{{usersess.photo}}" alt=""> {% endcomment %}
+                </div>
+                <div class="box-form">
+                    <form class="" action="{% url "loadImage" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input class="input-upload" type="file" name="newImage" multiple accept="image/*,image/jpeg"></br>
+                        <button class="upload" type="submit" name="button">Upload a photo</button>
+                    </form>
+                    <form class="" action="{% url 'exit' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="exit">Log out</button>
+                    </form>
+                </div>
+            </div>
+            <div class="close"><ion-icon class="close-btn" name="close-outline"></ion-icon></div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header">
+            <h1>Upiter</h1>
+            <div class="header-nav">
+                <div class="button">
+                    <a href="#" class="get-start">Get Premium</a>
+                </div>
+                <div class="name"><p>{% for el in usersess %}{{el.name}} {{el.surname}} {% endfor%}</p></div>
+                <div class="photo">{%for el in usersess%}<img src="{{el.photo}}" alt="" class="image">{% endfor%}<div class="openmodel"></div> </div>
+            </div>
+        </div>
+        <div class="main-block">
+            {% comment %} Домашняя страница {% endcomment %}
+            {% if pagelen == 0 %}
+            <div class = "upitermain open">
+                    <div class="greeting"><h1>Welcome {% for el in usersess %}{{el.name}}! {% endfor%}</h1></div>
+                    {% comment %} Блок с картами {% endcomment %}
+                    <div class="card-block">
+
+                        <div class="card debit">
+                            <div class="card-main">
+                                <div class="card-header">
+                                    <div class="card-name" ><p>{{debitcard.CardName}}</p></div>
+                                    <div class="numberOfcard"><p class="ppp" data-value="{{debitcard.numbercard}}" id ="numbercard"></p></div>
+                                </div>
+                                <div class="card-check">
+                                    <p class="valuta">$</p>
+                                    <p class="money">{{debitcard.Check}}</p>
+                                </div>
+                                <div class="footer-card">
+                                    <div class="cash-back">
+                                        <img src="{{debitcard.ImageCB.url}}" alt="">
+                                        <p>{{debitcard.CashBack}}</p>
+                                    </div>
+                                    <div class="payment-system">
+                                        <img src="{{debitcard.ImagePaymentSys.url}}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card credit">
+                            <div class="card-main">
+                                <div class="card-header">
+                                    <div class="card-name" ><p>{{creditcard.CardName}}</p></div>
+                                    <div class="numberOfcard"><p class="ppp" data-value ="{{creditcard.numbercard}}" id ="numbercard"></p></div>
+                                </div>
+                                <div class="card-check">
+                                    <p class="valuta">$</p>
+                                    <p class="money">{{creditcard.Check}}</p>
+                                </div>
+                                <div class="footer-card">
+                                    <div class="cash-back credits">
+                                        <img src="{{creditcard.ImageCB.url}}" alt="">
+                                        <p>{{creditcard.CashBack}}</p>
+                                    </div>
+                                    <div class="payment-system">
+                                        <img src="{{creditcard.ImagePaymentSys.url}}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if platinumcard != 0 %}
+                        <div class="card platinum">
+                            <div class="card-main">
+                                <div class="card-header">
+                                    <div class="card-name" ><p>{{platinumcard.CardName}}</p></div>
+                                    <div class="numberOfcard"><p class="ppp" data-value ="{{platinumcard.numbercard}}"></p></div>
+                                </div>
+                                <div class="card-check">
+                                    <p class="valuta">$</p>
+                                    <p class="money">{{platinumcard.Check}}</p>
+                                </div>
+                                <div class="footer-card">
+                                    <div class="cash-back ">
+                                        <img src="{{platinumcard.ImageCB.url}}" alt="">
+                                        <p>{{platinumcard.CashBack}}</p>
+                                    </div>
+                                    <div class="payment-system">
+                                        <img src="{{platinumcard.ImagePaymentSys.url}}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card addplatinum">
+                            <div class="card-main"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% comment %} Конец блока крат {% endcomment %}
+                    <div class = "QuickTransfer">
+                        <div class="quick_header"><h6>Quick Transfers</h6></div>
+                        <div class="list_peoples">
+
+                            {% for el in users%}
+                            <div class="people">
+                                <div class="pip">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="name" value="{{el.name}}">
+                                        <input type="hidden" name="surname" value="{{el.surname}}">
+                                        <input type ="hidden" name="phone" value="{{el.phone}}">
+                                        <div class="block_photo">
+                                            <button class="buttt" type="submit"><img class="peopimg" src="{{el.photo.url}}" alt=""></button>
+                                        </div>
+                                    </form>
+                                    <p class="people_name">{{el.name}}</p>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    {% comment %} Конец блока с быстрыми переводами {% endcomment %}
+                    <div class="currency">
+                        <div class="curren">
+                            <div class="rate"><h5 class="h5">Exchange rate</h5></div>
+                            <div class="evro">
+                                <div class="curren-img"><img src="https://cdn.icon-icons.com/icons2/903/PNG/512/euro_icon-icons.com_69531.png" alt=""></div>
+                                <div class="course">{{rates.eur_to_usd}} $</div>
+                            </div>
+                            <div class="foonts">
+                                <div class="curren-img"><img src="https://cdn.icon-icons.com/icons2/903/PNG/512/pound-sterling_icon-icons.com_69475.png" alt=""></div>
+                                <div class="course">{{rates.gbp_to_usd}} $</div>
+                            </div>
+                        </div>
+                        <div class="curren">
+                            <div class="rate"><h5 class="h5">Cryptocurrency rate</h5></div>
+                            <div class="efir">
+                                <div class="curren-img"><img src="{% static "main/Group 52.png"%}" alt=""></div>
+                                <div class="course">{{rate.usd_to_ethereum}} $</div>
+                            </div>
+                            <div class="bitcoins">
+                                <div class="curren-img"><img src="https://cdn.icon-icons.com/icons2/2389/PNG/512/bitcoin_logo_icon_145452.png" alt=""></div>
+                                <div class="course">{{rate.usd_to_bitcoin}} $</div>
+                            </div>
+                        </div>
+                        <div class="curren">
+                            <div class="rate"><h5 class="h5">Valuable metals</h5></div>
+                            <div class="gold">
+                                <div class="curren-img"><img src="https://cdn.icon-icons.com/icons2/1846/PNG/512/goldcart_116169.png" alt=""></div>
+                                <div class="course">{{rate.usd_to_gold}} $/1.TrYn</div>
+                            </div>
+                            <div class="silver">
+                                <div class="curren-img"><img src="https://cdn.icon-icons.com/icons2/1859/PNG/512/goldcart_117956.png" alt=""></div>
+                                <div class="course">{{rate.usd_to_silver}} $/1.TrYn</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} Конец блока с валютами {% endcomment %}
+                    <div class="opacity-block"></div>
+            </div>
+            {% elif page == "history" %}
+            {% comment %} Страница с историями переводов {% endcomment %}
+            <div class="upiterhistory">
+                <div class="backup">
+                    <div class="block-back">
+                        <div  class="back"><a href="{% url "setpage" "home"%}" class="a" id="upitermain" ><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+                        <h2>Home</h2>
+                    </div>
+                </div>
+                <div class="block-options">
+                    <div class="filter"><img class="img" src="{% static 'main/Frame (3).png' %}" alt=""></div>
+                    <div class="block-date"><p>per  jan  2024</p></div>
+                    <div class="button-close"><ion-icon class="iconclose" name="close-outline"></ion-icon></div>
+                    <div class="input-block">
+                        <form class="form" action="" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="block-btn">
+                                <button class="searchbtn" type="submit"><ion-icon class="lupa" name="search-outline"></ion-icon></button>
+                            </div>
+                            <div class="blocksearch">
+                                <input class="search" type="text" placeholder="Search" name="search" autocomplete="off">
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div></br>
+                <div class="block-transactions">
+                    
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Vinnie</p></div>
+                                 <div class="p2"><p>7 Jan 8:00</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Debits ****2023</p></div>
+                        </div>
+                        <div class="transumm">-2,500 $</div>
+                    </div>
+                    
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Dylan</p></div>
+                                 <div class="p2"><p>12 Jan 7:50</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Premium ****4380</p></div>
+                        </div>
+                        <div class="transumm">-2,500 $</div>
+                    </div>
+    
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Jay</p></div>
+                                 <div class="p2"><p>15 Jan 22:50</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Premium ****4693</p></div>
+                        </div>
+                        <div class="transumm">+1,999 $</div>
+                    </div>
+                    {% comment %} Delete {% endcomment %}
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Jay</p></div>
+                                 <div class="p2"><p>15 Jan 22:50</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Premium ****4693</p></div>
+                        </div>
+                        <div class="transumm">+1,999 $</div>
+                    </div>
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Jay</p></div>
+                                 <div class="p2"><p>15 Jan 22:50</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Premium ****4693</p></div>
+                        </div>
+                        <div class="transumm">+1,999 $</div>
+                    </div>
+                    <div class="transactions">
+                        <div class="firsttran">
+                            <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
+                            <div class="trandate">
+                                <div class="p1"><p>Jay</p></div>
+                                 <div class="p2"><p>15 Jan 22:50</p></div>
+                            </div>
+                        </div>
+                        <div class="tranfrom">
+                           <div class="p1"><p>From:</p></div>  
+                            <div class="p2"><p>Upiter Premium ****4693</p></div>
+                        </div>
+                        <div class="transumm">+1,999 $</div>
+                    </div>
+    
+                </div>
+                <div class="opacity-block"></div>
+            </div>
+            {% comment %} Страница транзакций {% endcomment %}
+            {% elif page == "transaction"%}
+            <div class= "transaction">
+                <div class="block-transaction">
+                    <div class="transac-header"><h1 class="h1">Transaction</h1></div>
+                    <div class="transac-main">
+
+                        <div class="block-operation">
+                            <div class = "show"><div class="show-logo"><ion-icon class="icon" name="reader-outline"></ion-icon></div></div>
+                            <div class="show-name"><p>Taxes</p></div>
+                        </div>
+                        <div class="block-operation">
+                            <div class = "show"><div class="show-logo"><ion-icon class="icon bitcoin" name="logo-bitcoin"></ion-icon></div></div>
+                            <div class="show-name"><p>Crypto investments</p></div>
+                        </div>
+                        <div class="block-operation">
+                            <div class = "show"><div class="show-logo "  id = "upitertransfer"><a href="{% url "setpage" 'transfer' %}"><ion-icon class="icon" name="swap-horizontal-outline"></ion-icon></a></div></div>
+                            <div class="show-name"><p>Quick transfers</p></div>
+                        </div>
+                        <div class="block-operation">
+                            <div class = "show"><div class="show-logo"><ion-icon class="icon" name="reload-outline"></ion-icon></div></div>
+                            <div class="show-name"><p>Auto payments</p></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% elif page == "transfer"%}
+            {% comment %} Страница переводов {% endcomment %}
+            <div class="upitertransfer ">
+                <div class="backup">
+                    <div class="block-back">
+                        <div  class="back"><a href = "{% url "setpage" "transaction"%}" class="a " id="transaction"><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+                        <h2>Transaction</h2>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="card debit">
+                        <div class="card-main">
+                            <div class="card-header">
+                                <div class="card-name" ><p>{{debitcard.CardName}}</p></div>
+                                <div class="numberOfcard"><p class="ppp" data-value="{{debitcard.numbercard}}" id ="numbercard"></p></div>
+                            </div>
+                            <div class="card-check">
+                                <p class="valuta">$</p>
+                                <p class="money">{{debitcard.Check}}</p>
+                            </div>
+                            <div class="footer-card">
+                                <div class="cash-back">
+                                    <img src="{{debitcard.ImageCB.url}}" alt="">
+                                    <p>{{debitcard.CashBack}}</p>
+                                </div>
+                                <div class="payment-system">
+                                    <img src="{{debitcard.ImagePaymentSys.url}}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card credit">
+                        <div class="card-main">
+                            <div class="card-header">
+                                <div class="card-name" ><p>{{creditcard.CardName}}</p></div>
+                                <div class="numberOfcard"><p class="ppp" data-value ="{{creditcard.numbercard}}" id ="numbercard"></p></div>
+                            </div>
+                            <div class="card-check">
+                                <p class="valuta">$</p>
+                                <p class="money">{{creditcard.Check}}</p>
+                            </div>
+                            <div class="footer-card">
+                                <div class="cash-back credits">
+                                    <img src="{{creditcard.ImageCB.url}}" alt="">
+                                    <p>{{creditcard.CashBack}}</p>
+                                </div>
+                                <div class="payment-system">
+                                    <img src="{{creditcard.ImagePaymentSys.url}}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if platinumcard != 0 %}
+                    <div class="card platinum">
+                        <div class="card-main">
+                            <div class="card-header">
+                                <div class="card-name" ><p>{{platinumcard.CardName}}</p></div>
+                                <div class="numberOfcard"><p class="ppp" data-value ="{{platinumcard.numbercard}}"></p></div>
+                            </div>
+                            <div class="card-check">
+                                <p class="valuta">$</p>
+                                <p class="money">{{platinumcard.Check}}</p>
+                            </div>
+                            <div class="footer-card">
+                                <div class="cash-back ">
+                                    <img src="{{platinumcard.ImageCB.url}}" alt="">
+                                    <p>{{platinumcard.CashBack}}</p>
+                                </div>
+                                <div class="payment-system">
+                                    <img src="{{platinumcard.ImagePaymentSys.url}}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="card addplatinum">
+                        <div class="card-main"></div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="users" id ="users">
+                 {% comment %} {% for el in users%}
+                            <div class="people">
+                                <div class="pip">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="name" value="{{el.name}}">
+                                        <input type="hidden" name="surname" value="{{el.surname}}">
+                                        <input type ="hidden" name="phone" value="{{el.phone}}">
+                                        <div class="block_photo">
+                                            <button class="buttt" type="submit"><img class="peopimg" src="{{el.photo.url}}" alt=""></button>
+                                        </div>
+                                    </form>
+                                    <p class="people_name">{{el.name}}</p>
+                                </div>
+                            </div>      
+                {% endfor %}  {% endcomment %}
+                </div>
+                <div class="block-enter">
+                    <div class="blockenter">
+                        <form class="form" action="" id="search">
+                            {% csrf_token %}
+                            <div class="block-input">
+                                <div class="inputblock">
+                                    <input type="text" id="search-input" class="input" placeholder="Enter card or phone number">
+                                    <a href="#" class="scan"><img class="scanimg" src="{% static 'main/Frame (2).png' %}" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="block-button">
+                                <button  type="submit" class="buth">Transfer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="endmain"></div>
+            </div>
+            {% comment %} Страница поддержки(мессенджер) {% endcomment %}
+            {% elif page == "messeg"%}
+            <div class="upitermesseg">
+                
+            </div>
+            {% endif %}
+        </div>
+        <div class="futer">
+            <div class="fut-block">
+                <div class="icon-link"><a href="{% url "setpage" 'home'%}" class="element" id ="upitermain"><ion-icon class = "icons" name="home-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url "setpage" 'history'%}" class="element" id ="upiterhistory"><ion-icon class = "icons"  name="timer-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'setpage' "transaction"%}" class="element" id="transaction" ><ion-icon class = "icons"  name="repeat-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'setpage' "messeg"%}" class="element" id ="upitermesseg"><ion-icon class = "icons" name="chatbubble-outline"></ion-icon></i></a></div>
+            </div>
+        </div>
+    </div>
+    {% else%}
+        <div class="noautho"><h1>You are not <a href="{% url "autoriz" %}">authorized</a></h1></div>
+    {% endif %}
+    <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" ></script>
+    <script  nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js" ></script>
+    <script src="{% static 'main/upiter.js' %}"></script>
+    <script > 
+        var users = {{ ussers | safe }};
+        document.addEventListener('DOMContentLoaded', function() {
+// Функция для отображения пользователей
+            function displayUsers(users) {
+                console.log('Received users:', users);  
+                var container = document.getElementById('users');
+                container.innerHTML = '';  
+                for(var i = 0; i < Math.min(6,users.length); i++) {  
+                    var user = users[i];
+                    console.log('Displaying user:', user);
+                    var userDiv = document.createElement('div');  
+                    userDiv.className = 'people';
+                    userDiv.innerHTML = 
+                        '<div class="pip">' +
+                            '<form action="" method="post">' +
+                                '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                                '<input type="hidden" name="name" value="' + user.name + '">' +
+                                '<input type="hidden" name="surname" value="' + user.surname + '">' +
+                                '<input type="hidden" name="phone" value="' + user.phone + '">' +
+                                '<div class="block_photo">' +
+                                    '<button class="buttt" type="submit"><img class="peopimg" src="' + user.photo + '" alt=""></button>' +
+                                '</div>' +
+                            '</form>' +
+                            '<p class="people_name">' + user.name + '</p>' +
+                        '</div>';
+                    container.appendChild(userDiv);
+                }
+            }
+
+            function displayUsersSearch(users, param) {
+                console.log('Received users:', users);  
+                var container = document.getElementById('users');
+                container.innerHTML = '';  
+                for(var i = 0; i < Math.min(6,users.length); i++) {  
+                    var user = users[i];
+                    if(user.phone.includes(param)){
+                        console.log('Displaying user:', user);
+                        var userDiv = document.createElement('div');  
+                        userDiv.className = 'people';
+                        userDiv.innerHTML = 
+                            '<div class="pip">' +
+                                '<form action="" method="post">' +
+                                    '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                                    '<input type="hidden" name="name" value="' + user.name + '">' +
+                                    '<input type="hidden" name="surname" value="' + user.surname + '">' +
+                                    '<input type="hidden" name="phone" value="' + user.phone + '">' +
+                                    '<div class="block_photo">' +
+                                        '<button class="buttt" type="submit"><img class="peopimg" src="' + user.photo + '" alt=""></button>' +
+                                    '</div>' +
+                                '</form>' +
+                                '<p class="people_name">' + user.name + '</p>' +
+                            '</div>';
+                        container.appendChild(userDiv);
+                    }
+                    
+                }
+            }
+            displayUsers(users);
+            
+            
+
+            // Обработка поискового запроса
+            document.getElementById('search').addEventListener("input", (event) => {
+                event.preventDefault();
+                var searchInput = document.getElementById('search-input').value;
+                if(searchInput.trim() != ""){
+                    displayUsersSearch(users, searchInput);
+                }
+                
+            });
+        });
+    </script>
+</body>
+</html>

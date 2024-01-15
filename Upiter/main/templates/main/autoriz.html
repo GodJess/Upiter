@@ -1,0 +1,61 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "main/autoriz.css" %}">
+    <title>Document</title>
+</head>
+<body>
+    <body>
+        <div class="block">
+            <div class="block-header">
+                <h1>Upiter</h1>
+                <h1>Upiter</h1>
+            </div>
+            <div class="main-block">
+                <div class="block-reg">
+                    <div class="prev">
+                        <h1>Login in</h1>
+                    </div>
+                    <div class="block-input">
+                        <form action="{% url "autoriz"%}" method = "post" class="form">
+                            {% csrf_token %}
+                            <div class="block-error">
+                                <p class="error">{{error}}</p>
+                            </div>
+                            <div class="block-enter">
+                                <input class="input" name ="numberphone" type="text" placeholder="Phone Number">
+                            </div>
+                            <div class="block-enter">
+                                <input class="input" name = "email" type="text" placeholder="Email">
+                            </div>
+                            <div class="block-enter">
+                                <input class="input" type="password" name="password" placeholder="Password">
+                            </div>
+                            <div class="block-button">
+                                <button class="button">Login in</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <a href="{% url "slider"%}" class="backup"><ion-icon class="icon" name="arrow-back-outline"></ion-icon></a>
+                </div>
+                <div class="block-logo">
+                    <div class="logo">
+                        <div class="logo-img">
+                            <img src="{% static "main/Logotype 1.png"%}" alt="">
+                        </div>
+                        <div class="logo-name">
+                            <h5>Upiter</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" ></script> 
+        <script  nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js" ></script>
+</body>
+</html>

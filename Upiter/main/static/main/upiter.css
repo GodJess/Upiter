@@ -1,0 +1,641 @@
+
+body{
+    display: flex;
+    background: #F2F2F2;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Neometric-Medium';
+  }
+  .block{
+    display: flex;
+    position: relative;
+    width: 1400px;
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .block-header{
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .block-header h1{
+    color: #0D0D0D;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: fantasy;
+  }
+  .button{
+    display: flex;
+    width: 150px;
+    height: 40px;
+    background: #0D0D0D;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.8s ease;
+  }
+  .get-start{
+    text-decoration: none;
+    list-style: none;
+    color: #f2f2f2;
+    font-size: 25px;
+    font-weight: 500;
+    transition: all 0.8s ease;
+  }
+  .button:hover{
+    background-color: #E5FF21;
+    .get-start{
+        color: #0D0D0D;
+    }
+  }
+
+  .name{
+    display: flex;
+    min-width: 150px;
+    height: 30px;
+    font-size: 25px;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    margin: 0px 10px;
+  }
+  .photo{
+    display: block;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: solid 2px #0D0D0D;
+  }
+  .photo img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  .openmodel{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    top: 0;
+  }
+  .header-nav{
+    display: flex;
+    justify-content: space-between;
+    min-width: 370px;
+    height: auto;
+    align-items: center;
+  }
+  .model{
+    position: fixed;
+    display: grid;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 99998;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .8);
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .4s ease;
+  }
+  .model.open{
+    visibility: visible;
+    opacity: 1;
+  }
+  .modal-box{
+    display: flex;
+    position: relative;
+    width: 500px;
+    height: 400px;
+    background-color: #F2F2F2;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0);
+    flex-wrap: wrap;
+  }
+  .modal-box.open{
+    transform: scale(1);
+  }
+  .h7{
+    margin-bottom: 10px;
+    color: #0D0D0D;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  .box-main{
+    width: 450px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    border: #0D0D0D solid 4px;
+    border-radius: 30px;
+  }
+  .box1{
+    display: flex;
+    width: 100%;
+    height: 150px;
+    align-items: center;
+    justify-content: center;
+    border-bottom: #0D0D0D solid 4px;
+  }
+  .box1 img{
+    width: 130px;
+    height: 130px;
+    border: #000000 solid 2px;
+    cursor: pointer;
+  }
+  .box-form{
+    display: flex;
+    width: 100%;
+    height: 170px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .input-upload{
+    border:#0D0D0D solid 2px;
+    background: #0D0D0D;
+    color: #E5FF21;
+    font-size: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    width: 400px;
+    height: 28px;
+    transition: all .6s ease;
+    margin: 10px 0px;
+  }
+  .input-upload:hover{
+    background-color: #E5FF21;
+    color: #0D0D0D;
+  }
+  .upload{
+    width: 400px;
+    height: 50px;
+    background: linear-gradient(311deg, #0D0D0D 0%, #E5FF21 100%);
+    border:2px solid #0D0D0D ;
+    color: #fff;
+    transition: all .6s ease;
+    font-size: 25px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  .upload:hover{
+    background: #0D0D0D;
+    color: #E5FF21;
+  }
+  .exit{
+    width: 400px;
+    height: 50px;
+    border:2px solid #0D0D0D ;
+    background: linear-gradient(311deg, #0D0D0D 0%, #E5FF21 100%);
+    color: #fff;
+    margin-top: 10px;
+    transition: all .6s ease;
+    font-size: 25px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  .exit:hover{
+    background: #0D0D0D;
+    color: #E5FF21;
+  }
+  .close{
+    display: flex;
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 0;
+    right: 0;
+    margin: 10px 10px;
+    background-color: #0D0D0D;
+    transition: all .6s ease;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    border:#0D0D0D 2px solid;
+  }
+  .close-btn{
+    width: 30px;
+    height: 30px;
+    color: #E5FF21;
+    transition: all .6s ease;
+  }
+  .close:hover{
+    background-color: #E5FF21;
+    .close-btn{
+      color: black;
+    }
+  }
+
+  .main-block{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-top: 2px solid black;
+    flex-wrap: wrap;
+  }
+  .greeting{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .greeting h1{
+    font-size: 85px;
+    margin-top: auto;
+    font-weight: 600;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  .card-block{
+    display: flex;
+    width: 100%;
+    min-width: 420px;
+    height: auto;
+    margin-top: -20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    /* scroll-snap-type: X mandatory; */
+  }
+  .card{
+    position: relative;
+    display: flex;
+    width: 400px;
+    min-width: 300px;
+    height: 200px;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    /* flex-shrink: 0;
+    scroll-snap-align: end; */
+  }
+  .credit{
+    background-color: #FFF;
+    border: solid 2px #0D0D0D;
+  }
+  .debit{
+    background-color: #E5FF21;
+  }
+  .platinum{
+    background-color: #0D0D0D;
+    color: #F2F2F2;
+  }
+  .card-main{
+    display: flex;
+    width: 290px;
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .card-header{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .card-name{
+    margin-top: auto;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  .numberOfcard{
+    margin-top: auto;
+    font-size: 25px;
+    font-weight: 600;
+  }
+  .card-check{
+    width: 100%;
+    height: 90px;
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .valuta{
+    font-size: 30px;
+    font-weight: 600;
+  }
+  .money{
+    font-size: 45px;
+    font-weight: 600;
+  }
+.footer-card{
+  display: flex;
+  width: 100%;
+  height: 40px;
+  margin-top: auto;
+  overflow: hidden;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.cash-back{
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  width: 94px;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #F2F2F2;
+  color: #0D0D0D;
+}
+.credits{
+  background-color: #0D0D0D;
+  color: #F2F2F2;
+}
+.cash-back img{
+  width: 40px;
+  height: auto;
+}
+.cash-back p{
+  font-size: 25px;
+  font-weight: 500;
+}
+.payment-system{
+  display: block;
+  height: 40px;
+}
+.payment-system img{
+  height: auto;
+  width: 70px;
+}
+.QuickTransfer{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  margin-bottom: 50px;
+}
+.quick_header{
+  display: flex;
+  width: 100%;
+  height: 120px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.quick_header h6{
+  color: #0D0D0D;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: fantasy;
+}
+.list_peoples{
+  display: flex;
+  width: 100%;
+  height: 170px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.people{
+  display: flex;
+  width: 170px;
+  height: auto; 
+  transition: all 0.5s ease;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.people:hover{
+  background-color: white;
+}
+.pip{
+  display: flex;
+  height: 150px;
+  width: 120px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.block_photo{
+  position: relative;
+  display: block;
+  width: 120px;
+  height: 100px;
+  border-radius: 15px;
+  border: 1px solid rgb(65, 65, 65);
+  overflow:hidden ;
+}
+.buttt{
+  display: flex;
+  width: 120px;
+  height: 100px;
+  border: none;
+  border-radius: 15px;
+  justify-content: flex-start;
+  align-items: start;
+  padding-left: 0px;
+  padding-top: 0px;
+}
+.peopimg{
+
+  width: 120px;
+  height: 100px;
+  border-radius: 15px;
+}
+.people_name{
+    margin-top: -1px;
+    font-size: 25px;
+    font-weight: bold;
+}
+.currency{
+  display: flex;
+  width: 100%;
+  min-width: 420px;
+  height: auto;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  background-color: #FFF;
+  border-radius: 30px;
+  padding: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.curren{
+  display: flex;
+  width: 300px;
+  height: auto;
+  margin-right: 20px;
+  color: #0D0D0D;
+  transition: all .6s ease;
+  flex-wrap: wrap;
+  overflow: hidden;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.rate{
+  display: flex;
+  width: 100%;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.rate h5{
+    font-size: 25px;
+    font-weight: 600;
+}
+.evro, .foonts, .efir, .bitcoins, .gold, .silver{
+  display: flex;
+  width: 300px;
+  height: auto;
+  margin-top: 25px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.curren-img{
+  display: block;
+  width: 50px;
+  height: auto;
+}
+.curren-img img{
+  width: 45px;
+  height: auto;
+}
+.course{
+  display: block;
+  width: 200px;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 600;
+}
+.opacity-block{
+  margin-top: 50px;
+  display: flex;
+  width: 100%;
+  height: 50px;
+}
+.futer{
+  position: fixed;
+  display: flex;
+  height: 80px;
+  bottom: 0;
+  max-width: 1400px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.fut-block{
+  display: flex;
+  height: 70px ;
+  width: 500px;
+  background-color: #0D0D0D;
+  border-radius: 25px;
+  padding: 10px 30px;
+  justify-content: space-around;
+  align-items: center;
+}
+.icon-link{
+  display: block ;
+  width: 50px;
+  height: 50px;
+  
+}
+.icon-link a{
+  text-decoration: none;
+  list-style: none;
+}
+.icons{
+  width: 100%;
+  height: 100%;
+  color: white;
+  transition: all .5s ease;
+}
+.icons:hover{
+  color:#E5FF21
+}
+@media (max-width: 1400px){
+  .card-block{
+    display: flex;
+    width: 100%;
+    min-width: 300px;
+    height: auto;
+    margin-top: -20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .card{
+    position: relative;
+    display: flex;
+    width: 350px;
+    min-width: 300px;
+    height: 200px;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  .currency{
+    display: flex;
+    width: 100%;
+    height: auto;
+    flex-wrap: nowrap;
+    background-color: #FFF;
+    border-radius: 30px;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .curren{
+    display: flex;
+    width: 250px;
+    height: auto;
+    margin-right: 20px;
+    color: #0D0D0D;
+    transition: all .6s ease;
+    flex-wrap: wrap;
+    overflow: hidden;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+.noautho{
+  display: flex;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  flex-wrap: wrap;
+}
+.noautho h1{
+  font-size: 35px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+  transition: all .6s ease;
+  color: #0D0D0D;
+}
+.noautho h1 a{
+  text-decoration: none;
+  list-style: none ;
+  color: #0D0D0D;
+  transition: all .5s ease;
+  margin-top: 500px;
+}
+.noautho h1 a:hover{
+  color: rgb(224, 25, 25);
+}
+
+.upitermain, .upiterhistory, .upitertransfer,
+.upitermesseg, .transaction{
+  display: flex;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap; 
+}
+/* .upitermain.open, .upiterhistory.open,
+.upitertransfer.open, .upitermesseg.open, .transaction.open {
+  opacity: 1;
+  transform: scale(1);
+} */
+/* Страница с историей переводов */
+
+
