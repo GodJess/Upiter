@@ -1,0 +1,206 @@
+{% extends "main/main.html" %}
+{% load static %}
+
+{% block content %}
+<div class="upiterhistory">
+    <div class="backup">
+        <div class="block-back">
+            <div  class="back"><a href="{% url "setpage" "home"%}" class="a" id="upitermain" ><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+            <h2>Home</h2>
+        </div>
+    </div>
+    <div class="block-options">
+        <div class="filter"><img class="img" src="{% static 'main/Frame (3).png' %}" alt=""></div>
+        <div class="block-date"><p>per  jan  2024</p></div>
+        <div class="button-close"><ion-icon class="iconclose" name="close-outline"></ion-icon></div>
+        <div class="input-block">
+            <form class="form" action="" autocomplete="off">
+                {% csrf_token %}
+                <div class="block-btn">
+                    <button class="searchbtn" type="submit"><ion-icon class="lupa" name="search-outline"></ion-icon></button>
+                </div>
+                <div class="blocksearch">
+                    <input class="search" type="text" placeholder="Search" name="search" autocomplete="off">
+                </div>
+                
+            </form>
+        </div>
+    </div></br>
+    <div class="block-transactions">
+        
+        <div class="transactions">
+            <div class="firsttran">
+                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
+                <div class="trandate">
+                    <div class="p1"><p>Vinnie</p></div>
+                     <div class="p2"><p>7 Jan 8:00</p></div>
+                </div>
+            </div>
+            <div class="tranfrom">
+               <div class="p1"><p>From:</p></div>  
+                <div class="p2"><p>Upiter Debits ****2023</p></div>
+            </div>
+            <div class="transumm">-2,500 $</div>
+        </div>
+        
+        <div class="transactions">
+            <div class="firsttran">
+                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
+                <div class="trandate">
+                    <div class="p1"><p>Dylan</p></div>
+                     <div class="p2"><p>12 Jan 7:50</p></div>
+                </div>
+            </div>
+            <div class="tranfrom">
+               <div class="p1"><p>From:</p></div>  
+                <div class="p2"><p>Upiter Premium ****4380</p></div>
+            </div>
+            <div class="transumm">-2,500 $</div>
+        </div>
+
+        <div class="transactions">
+            <div class="firsttran">
+                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
+                <div class="trandate">
+                    <div class="p1"><p>Jay</p></div>
+                     <div class="p2"><p>15 Jan 22:50</p></div>
+                </div>
+            </div>
+            <div class="tranfrom">
+               <div class="p1"><p>From:</p></div>  
+                <div class="p2"><p>Upiter Premium ****4693</p></div>
+            </div>
+            <div class="transumm">+1,999 $</div>
+        </div>
+        {% comment %} Delete {% endcomment %}
+        
+
+    </div>
+    <div class="opacity-block"></div>
+</div>
+{% endblock%}
+
+{% block script%}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var transferss = {{ transfers | safe}};
+        var sender = {{ sender | safe}};
+        var sendersur = {{ sendersur | safe }}
+        var images = {{images | safe}}        
+        var histtransfer = {{ histtransfer | safe}}
+
+        var ttransfers = []
+        var transfers = []
+        for(var i = 0; i < transferss.length; i++){
+            ttransfers.push(transferss[i]);
+        }
+        for(var i = 0; i < histtransfer.length; i++){
+            ttransfers.push(histtransfer[i]);
+        }
+        console.log(ttransfers);
+        
+        for (var i = 0; i < ttransfers.length; i++) {
+            if (transfers.some(item => item.id === ttransfers[i].id)) {
+                continue;
+            } else {
+                transfers.push(ttransfers[i]);
+            }
+        }
+
+        const sortByDateTime = (transfers) => {
+            return transfers.sort((a, b) => {
+                if(a.Date < b.Date){
+                    return 1;
+                }
+                if(a.Date > b.Date){
+                    return -1 ;
+                }
+                if(a.Time < b.Time){
+                    return 1;
+                }
+                if(a.Time > b.Time){
+                    return -1;
+                }
+            })
+        }
+        var sortedTransfers = sortByDateTime(transfers);
+
+        const AddHistoryElement = (el, sender, sendersur) =>{
+            container = document.querySelector(".block-transactions");
+            container.innerHTML = '';
+            for(var i = 0; i < el.length ; i++){
+                historyEl = el[i];
+                console.log(historyEl)
+                if(historyEl.Sender == sender && historyEl.SenderSurname == sendersur ){
+                    photo = CheckImage(images, "Up");
+                    symbol = "-";
+                    card = "****" + (historyEl.WhereFrom.substring(historyEl.WhereFrom.length - 4));
+                    pattern(container, photo, historyEl, symbol, card);
+                }
+                if(historyEl.Recipient == sender && historyEl.RecipientSurname == sendersur)
+                {
+                    photo = CheckImage(images, "Down");
+                    symbol = " ";
+                    card = "****" + (historyEl.WhereFrom.substring(historyEl.WhereFrom.length - 4));
+                    pattern(container, photo, historyEl, symbol, card);
+                }
+                
+            }
+        }
+
+        const pattern = (container, photo, mass, symbol, card)=>{
+            hisEl = document.createElement("div");
+                hisEl.className = "transactions"
+                hisEl.innerHTML = 
+                '<div class="firsttran">'+
+                    '<div class="tranicons"><img class = "arrow" data-img="' + photo + '" src="" alt=""></div>'+
+                        '<div class="trandate">' +
+                            '<div class="p1"><p>'+ mass.Sender +'</p></div>' +
+                            '<div class="p2"><p class="DateTime" data-value="' + mass.Date + '"  data-time="' + mass.Time + '"></p></div>' +
+                        '</div>' +
+                    '</div>' + 
+                    '<div class="tranfrom">' + 
+                        '<div class="p1"><p>From:</p></div>' +
+                        '<div class="p2"><p>'+ mass.CardNameOffs + " " + card + '</p></div>'+
+                    '</div>' +
+                    '<div class="transumm">'+ symbol + mass.Summ +" $" +'</div>' +
+                '</div>';
+            container.appendChild(hisEl);
+        }
+        function CheckImage(images, el){
+            var image = ""
+            for(var i = 0; i < images.length; i++ ){
+                image = images[i];
+            }
+            if(el == "Up"){
+                return image.ImageUp;
+            }
+            if(el == "Down"){
+                return image.ImageDown;
+            }
+            
+        }
+        AddHistoryElement(sortedTransfers, sender, sendersur);
+
+        const imageArrows = document.querySelectorAll('.arrow');
+        imageArrows.forEach(imageArrow => {
+            imageArrow.src = imageArrow.getAttribute("data-img");
+        });
+        const dateTimes = document.querySelectorAll('.DateTime');
+        dateTimes.forEach( dateTime =>{
+            var date = new Date(dateTime.getAttribute("data-value"));
+            var time = dateTime.getAttribute("data-time").substring(0,5);
+
+
+            let dayOfMonth = date.getDate();
+            let monthNames = ['jan', 'Feb', 'Mar', 'Apr',
+             'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+              'Nov', 'Dec'];
+            
+            let monthName = monthNames[date.getMonth()];
+            let result = dayOfMonth + ' ' + monthName;
+            dateTime.textContent = result + " " + time
+        })
+});
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+body{
+    margin: 0;
+    font-family: 'Neometric',sans-serif;
+    background-color: #F2F2F2;
+}
+.BodyPage{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.round{
+    display: block;
+    margin-bottom: -100px;
+    margin-left: auto;
+    margin-top: 70px;
+    margin-right: auto;
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 423px;
+    background: #E5FF21;
+    width: 223px;
+    height: 223px;
+    flex-shrink: 0;
+    z-index: 2;
+}
+img{
+    height: 123px;
+    width: 123px;
+}
+
+.transactionBody{
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: #0D0D0D;
+    height: 680px;
+    width: 100%;
+    border-radius: 20px 20px 0px 0px;
+    z-index: 1;
+}
+.headTransfer{
+    text-align: center;
+    color: #F2F2F2;
+    font-weight: 500;
+    font-size: 40px;
+}
+.amount{
+    font-size: 70px;
+}
+.info{
+    font-size: 25px;
+    font-weight: 900;
+    text-align: left;
+    margin-left: 25px;
+    color: #F2F2F2;
+    margin-bottom: 10px;
+}
+button{
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+    background: #F2F2F2;
+    width: 578px;
+    height: 90px;
+    flex-shrink: 0;
+    font-size: 50px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.6s ease;
+}
+button:hover{
+    background: #E5FF21;
+}
+.constrains{
+    display: flex;
+    flex-direction: column;
+    margin-top: 150px;
+}
+.nav{
+    position: absolute;
+    top: 0;
+    margin-left: 25px;
+    height: 120px;
+    width: 100px;
+    display: flex;
+    justify-content: space-between;
+    color: #0D0D0D;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 48.5px; /* 75.781% */
+    letter-spacing: -0.8px;
+    column-gap: 25px;
+}
+.arrow{
+    margin-top: 47px;
+    height: 50px;
+    width: 70px;
+}
+.indentation{
+    margin: 15px;
+}
+p a{
+    text-decoration: none;
+    list-style: none;
+    color:#0D0D0D;
+    transition: all 0.6s ease;
+}
+p a:hover{
+    color: red;
+}

@@ -31,6 +31,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_USER = "usersess"
 SESSION_PAGE ="page"
+SESSION_CHOOSE_TRANSFER = "choose_transfer"
 # Application definition
 
 INSTALLED_APPS = [

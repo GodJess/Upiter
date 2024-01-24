@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main/TransactionDone.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="BodyPage">
+        <div class="nav">
+            <img src="{% static 'main/Arrow 1.svg' %}" alt="" class="arrow">
+            <p><a href="{% url 'setpage' 'home' %}"> Home</a></p>
+        </div>
+            <div class="round pos">
+                <img src="{% static 'main/Frame.svg'%}" alt="">
+            </div>
+            <div class="transactionBody">
+                <div class="constrains ">
+                    <p class="headTransfer indentation where" data-value="{{where}}"></p>
+                    <p class="amount headTransfer indentation">-{{summ}}$</p>
+                    <!-- <p class="info headTransfer indentation">Transfer details <br> From: Upiter Debits ****2023 <br> Date: 5th of Jan 18-00  <br> Phone Number:+44(456)712-83-87</p>     -->
+                     <div class="info-block">
+                        <p class="info">Transfer details:</p>
+                        <p class="info from" data-value="{{whereFrom}}">From: {{CardNameOffs}} </p>
+                        <p class="info">Date: {{date}} of Jan {{time}}</p>
+                        <p class="info">Phone Number: {{numberPhone}}</p>
+                     </div>   
+                     <form action="{% url 'transfer' %}">
+                        <button>To Transfer</button>
+                     </form>
+                </div>
+            </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const TransferWhere = document.querySelector(".where");
+            const TransferFrom = document.querySelector(".from");
+
+            var reswhere = TransferWhere.getAttribute("data-value")
+            var resw = reswhere.substring(reswhere.length - 4);
+            var resfrom = TransferFrom.getAttribute("data-value")
+            var resf = resfrom.substring(resfrom.length - 4);
+
+            TransferWhere.textContent = "Transfer to ****"+ resw +" card";
+            TransferFrom.textContent += (" ****"+ resf); 
+        });
+    </script>
+</body>
+</html>

@@ -1,12 +1,11 @@
 /* Страница с историей переводов  */
-.backup{
+.upiterhistory .backup{
     display: flex;
     width: 100%;
-    height: 80px;
+    height: 60px;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
-    margin-bottom: 20px;
 }
     .block-back{
         display: flex;
@@ -58,7 +57,7 @@
     height: auto;
     justify-content: space-between;
     align-items: center;
-    max-height: 50px;
+    max-height: 40px;
     overflow: hidden;
     flex-wrap: nowrap;
   }
@@ -159,6 +158,7 @@
     border: none;
     font-size: 25px;
     color: #0D0D0D;
+    outline: none;
   }
   .block-transactions{
     display: flex;
@@ -175,16 +175,19 @@
     margin-left: 20px;
     display: flex;
     width: 80%;
-    height: auto;
-    margin-top: 50px;
+    height: 100px;
+    margin-top: 20px;
+    border: solid  2px #0D0D0D;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
+    border-radius: 40px;
+    padding-left: 30px;
   }
   .firsttran{
     display: flex;
     width: 280px;
-    height: auto;
+    height: 70px;
     justify-content: space-between;
     align-items: center;
     margin-right: 20px;
@@ -206,7 +209,7 @@
   .trandate{
     display: flex;
     min-width: 170px;
-    height: 60px ;
+    height: 50px ;
     flex-wrap: wrap;
     /* align-items: center; */
   }
@@ -214,16 +217,17 @@
     display: flex;
     width: 100%;
     justify-content: flex-start;
-    height: 30px;
+    height: 25px;
     flex-wrap: nowrap;
     align-items: center;
     color: #0D0D0D;
     font-size: 25px;
+    margin: 0px;
   }
   .tranfrom{
     display: flex;
     min-width: 270px;
-    height: 60px;
+    height: 50px;
     margin-right: 50px;
     flex-wrap: wrap;
   }
@@ -231,16 +235,20 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    height: 30px;
+    height: 25px;
     flex-wrap: nowrap;
     align-items: center;
     color: #0D0D0D;
     font-size: 25px;
   }
+
+  .p1 p, .p2 p{
+    margin: 0px;
+  }
   .transumm{
     display: flex;
     min-width: 120px;
-    height: 60px;
+    height: 50px;
     justify-content: flex-start;
     align-items: center;
     color: #0D0D0D;
@@ -692,3 +700,125 @@
   /* .bitcoin{
     font-weight: 100;
   } */
+  .main-block-transfer{
+    display: flex;
+    width: 300px;
+    height: auto;
+    flex-wrap: wrap;
+}
+.block-number-card{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.block-name-card{
+    display: flex;
+    width: 200px;
+    height: auto;
+    height: 80px;
+    flex-wrap: wrap;
+}
+.owner{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    color: black;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px ;
+    font-family: 'Times New Roman', Times, serif;
+}
+.owner p{
+    padding: 0px;
+    margin: 0px;
+}
+.select-card{
+    display: flex;
+    width: 100%;
+    height: 40px;
+    align-items: start;
+    justify-content: space-between;
+}
+#selectCard{
+    width: 140px;
+    background-color:#F2F2F2 ;
+    font-size: 30px ;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+    border: none;
+    outline: none;
+}
+#img{
+    width: 50px;
+    height: 40px;
+}
+.img-user{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+.input-price{
+    display: flex;
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+    justify-content: center;
+    
+}
+.summ{
+    display: flex;
+    width: 140px;
+    justify-content: center;
+    font-size: 50px;
+    font-weight: 500;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: black;
+    padding: 0px 30px;
+    background-color: #F2F2F2;
+    border: none;
+    outline: none;
+    border-bottom: solid black 2px;
+}
+.inp{
+    overflow: hidden;
+    transform: scale(0);
+}
+.tarnbth{
+    width: 100%;
+    height: 50px;
+    background: black;
+    color: white;
+    font-size: 30px;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.6s ease;
+}
+.tarnbth:hover{
+    background:#E5FF21 ;
+    color: black;
+}
+.tarnbth:active{
+    background: #c4d63a;
+    color: black;
+}
+.blocktrans{
+  display: flex;
+  width: 100%;
+  height: auto;
+  margin-top: 100px;
+  justify-content: center;
+}
+.SelectorCard{
+  position: absolute;
+  margin: 2px;
+  width: 100%;
+  height: 100%;
+  border-radius:30px;
+  border:solid 2px rgb(255, 0, 0);
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+.SelectorCard.press{
+  opacity: 1;
+}

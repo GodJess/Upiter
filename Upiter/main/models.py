@@ -88,3 +88,50 @@ class PlatinumCard(models.Model):
     class Meta:
         verbose_name = "Платиновая карта"
         verbose_name_plural = "Платиновые карты"
+
+class Transfer(models.Model):
+    Sender = models.CharField("Отправитель", max_length = 100)
+    Recipient = models.CharField("Получатель", max_length = 100)
+    WhereFrom = models.CharField("Счет списания", max_length = 100)
+    Where = models.CharField("Счет пополнения", max_length = 100)
+    Date = models.DateField("Дата отправки")
+    Time = models.TimeField("Время отправки")
+    Summ = models.CharField("Сумма транзакции", max_length = 100)
+    CardNameOfDepozit = models.CharField("Название карты пополнения", max_length = 100)
+    CardNameOffs = models.CharField("Название карты списания", max_length = 100)
+
+    def __str__(self):
+        return self.Sender
+    
+    class Meta: 
+        verbose_name = "Перевод"
+        verbose_name_plural = "Переводы"
+
+class Transfers(models.Model):
+    Sender = models.CharField("Отправитель", max_length = 100)
+    Recipient = models.CharField("Получатель", max_length = 100)
+    WhereFrom = models.CharField("Счет списания", max_length = 100)
+    Where = models.CharField("Счет пополнения", max_length = 100)
+    Date = models.DateField("Дата отправки")
+    Time = models.TimeField("Время отправки")
+    Summ = models.CharField("Сумма транзакции", max_length = 100)
+    CardNameOfDepozit = models.CharField("Название карты пополнения", max_length = 100)
+    CardNameOffs = models.CharField("Название карты списания", max_length = 100)
+    SenderSurname = models.CharField("Отправитель_фамилия", max_length = 100)
+    RecipientSurname = models.CharField("Получатель_фамилия", max_length = 100)
+    
+    def __str__(self):
+        return self.Sender
+    
+    class Meta: 
+        verbose_name = "Перевод"
+        verbose_name_plural = "Транзакции"
+
+class ImageTransfers(models.Model):
+        ImageUp = models.ImageField(upload_to = "images/")
+        ImageDown = models.ImageField(upload_to = "images/")
+    
+
+        class Meta: 
+            verbose_name = "Картинки"
+            verbose_name_plural = "Картинки"

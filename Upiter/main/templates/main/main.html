@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main/upiter.css' %}">
+    <link rel="stylesheet" href="{% static 'main/another.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    {% if length != 0 %}
+    <div class="model">
+        <div class="modal-box">
+            <h7 class="h7">Profile photo</h7></br>
+            <div class="box-main">
+                <div class="box1">
+                    {%for el in usersess%}<img src="{{el.photo}}" alt="">{% endfor%}
+                    {% comment %} <img src="{{usersess.photo}}" alt=""> {% endcomment %}
+                </div>
+                <div class="box-form">
+                    <form class="" action="{% url "loadImage" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input class="input-upload" type="file" name="newImage" multiple accept="image/*,image/jpeg"></br>
+                        <button class="upload" type="submit" name="button">Upload a photo</button>
+                    </form>
+                    <form class="" action="{% url 'exit' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="exit">Log out</button>
+                    </form>
+                </div>
+            </div>
+            <div class="close"><ion-icon class="close-btn" name="close-outline"></ion-icon></div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header">
+            <h1>Upiter</h1>
+            <div class="header-nav">
+                <div class="button">
+                    <a href="#" class="get-start">Get Premium</a>
+                </div>
+                <div class="name"><p>{% for el in usersess %}{{el.name}} {{el.surname}} {% endfor%}</p></div>
+                <div class="photo">{%for el in usersess%}<img src="{{el.photo}}" alt="" class="image">{% endfor%}<div class="openmodel"></div> </div>
+            </div>
+        </div>
+        <div class="main-block">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="futer">
+            <div class="fut-block">
+                <div class="icon-link"><a href="{% url "setpage" 'home'%}" class="element" id ="upitermain"><ion-icon class = "icons" name="home-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'history' %}" class="element" id ="upiterhistory"><ion-icon class = "icons"  name="timer-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'setpage' "transaction"%}" class="element" id="transaction" ><ion-icon class = "icons"  name="repeat-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'messenger' %}" class="element" id ="upitermesseg"><ion-icon class = "icons" name="chatbubble-outline"></ion-icon></i></a></div>
+            </div>
+        </div>
+    </div>
+    {% else%}
+        <div class="noautho"><h1>You are not <a href="{% url "autoriz" %}">authorized</a></h1></div>
+    {% endif %}
+    <script  type = "module"  src = "https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" ></script>
+    <script  nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js" ></script>
+    <script src="{% static 'main/upiter.js' %}"></script>
+    <script src="{% static 'main/users.js' %}"></script>
+    {% block script%}
+    {% endblock %}
+    
+</body>
+</html>

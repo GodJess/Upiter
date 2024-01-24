@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from .utils import get_exchange_rates, get_alternative_assets
+from .utils import  get_alternative_assets
 from django.conf import settings
-from main.models import Users, DebitCard, CreditCard, PlatinumCard
-from .serializers import serialize_user_data, UserImage
+from main.models import Users, DebitCard, CreditCard, PlatinumCard, Transfer, Transfers, ImageTransfers
+from .serializers import serialize_user_data, UserImage, SerializeTransfers, SerializeImages
 import json
 # Create your views here.
 def slider(request):
+    delSession(request)
     usersess = request.session.get(settings.SESSION_USER, {})
     length = len(usersess)
     request.session.pop(settings.SESSION_PAGE, None)
@@ -15,6 +16,7 @@ def slider(request):
     return render(request, "main/slider.html", data)
 
 def autoriz(request):
+    delSession(request)
     error =""
     if request.method == "POST":
         usersess = request.session.get(settings.SESSION_USER, {})
@@ -61,9 +63,71 @@ def upiter(request):
     debitcard = ""
     creditcard = ""
     platinumcard = "" 
-    ussers = ""
     if len(usersess) > 0:
         users = Users.objects.all()[:7]
+        for el in usersess:
+            name = el['name']
+            surname = el['surname']
+            email = el['email']
+        debitcard = DebitCard.objects.filter(name = name, surname = surname, email = email).first()
+        creditcard = CreditCard.objects.filter(name = name, surname = surname, email = email).first()
+        platinumcard = PlatinumCard.objects.filter(name = name, surname = surname, email = email).first()
+    if platinumcard:pass
+    else:
+        platinumcard = 0
+
+
+    rate = get_alternative_assets()
+    data ={
+         "rate": rate, "length": length,
+        "usersess": usersess, "debitcard": debitcard, "creditcard": creditcard, "platinumcard": platinumcard,
+        "page": pages, "pagelen" : pagelen, "users": users,
+    }
+    return render(request, "main/upiter.html", data)
+
+
+def history(request):
+    delSession(request)
+    usersess = request.session.get(settings.SESSION_USER, {})
+    length = len(usersess)
+    if(length) > 0:
+        for el in usersess:
+            sender1 = json.dumps(el['name'])
+            sendersur1 = json.dumps(el['surname'])
+            sender = el['name']
+            sendersur = el['surname']
+        images = json.dumps(SerializeImages(ImageTransfers.objects.all(), many = True).data)
+        transfers = Transfers.objects.filter(Sender = sender, SenderSurname = sendersur) 
+        histtransfer = json.dumps(SerializeTransfers(Transfers.objects.filter(Recipient = sender, RecipientSurname = sendersur), many =True).data)
+        serialized = SerializeTransfers(transfers, many = True)
+        transferss = json.dumps(serialized.data)
+    data ={
+        "usersess": usersess, "length": length, "transfers":transferss, "sender": sender1, "sendersur": sendersur1, "images": images, "histtransfer": histtransfer,
+    }
+    return render(request, "main/history.html",  data)
+
+
+def transfer(request):
+    usersess = request.session.get(settings.SESSION_USER, {})
+    choose_transfer = request.session.get(settings.SESSION_CHOOSE_TRANSFER, {})
+    transferDebit =  transferCredit = transferPlatinum = selected_user = ""
+    length_choose_transfer =len(choose_transfer)
+    if len(choose_transfer) != 0:
+        for el in choose_transfer:
+            name = el['name']
+            surname = el['surname']
+            phone = el['phone']
+        selected_user = Users.objects.filter(name = name, surname = surname, phone = phone).first()
+        transferDebit = DebitCard.objects.filter(name = name, surname = surname, phone = phone).first()
+        transferCredit = CreditCard.objects.filter(name = name, surname = surname, phone = phone).first()
+        transferPlatinum = PlatinumCard.objects.filter(name = name, surname = surname, phone = phone).first()
+    if transferPlatinum:pass
+    else:
+        transferPlatinum = 0
+    length = len(usersess)
+    debitcard = creditcard = platinumcard = ""
+    ussers = ""
+    if len(usersess) > 0:
         serialized_users = UserImage(Users.objects.all(), many=True)
         ussers = json.dumps(serialized_users.data)
         for el in usersess:
@@ -76,17 +140,26 @@ def upiter(request):
     if platinumcard:pass
     else:
         platinumcard = 0
-
-    rates = get_exchange_rates("d0b062b411bc5980a45f2c5a16e2d6fc")
-    rate = get_alternative_assets()
     data ={
-        "rates": rates, "rate": rate, "length": length,
-        "usersess": usersess, "debitcard": debitcard, "creditcard": creditcard, "platinumcard": platinumcard,
-        "page": pages, "pagelen" : pagelen, "users": users, "ussers": ussers,
+        "usersess": usersess, "length": length, "debitcard": debitcard, "creditcard": creditcard, "platinumcard": platinumcard,
+        "ussers": ussers, "selected_user": selected_user, "transferCredit": transferCredit, "transferDebit": transferDebit, "transferPlatinum": transferPlatinum,
+        "length_choose_transfer": length_choose_transfer,
     }
-    return render(request, "main/upiter.html", data)
+    return render(request, "main/transfer.html", data)
+
+
+def messenger(request):
+    delSession(request)
+    usersess = request.session.get(settings.SESSION_USER, {})
+    length = len(usersess)
+    data ={
+        "usersess": usersess, "length": length,
+    }
+    return render(request, "main/messenger.html", data)
+
 
 def exit(request):
+    delSession(request)
     usersess = request.session.get(settings.SESSION_USER, {})
     if request.method == "POST":
         request.session.pop(settings.SESSION_USER, None)
@@ -115,6 +188,7 @@ def loadImage(request):
     return redirect("upiter")
 
 def setpage(request, name):
+    delSession(request)
     if name == "home":
         request.session.pop(settings.SESSION_PAGE, None)
     else:
@@ -126,3 +200,116 @@ def setpage(request, name):
         request.session[settings.SESSION_PAGE] = page 
         
     return redirect("upiter")
+
+def selectTransfer(request):
+    choose_transfer = request.session.get(settings.SESSION_CHOOSE_TRANSFER, {})
+    if request.method == "POST":
+        name = request.POST.get("name")
+        surname = request.POST.get("surname")
+        phone = request.POST.get("phone")
+
+        choose_transfer = []
+        choose_transfer.append({
+            "name": name, "surname": surname, "phone": phone,
+        })
+
+        request.session[settings.SESSION_CHOOSE_TRANSFER] = choose_transfer
+
+        return redirect("transfer")
+
+def delSession(request):
+    request.session.pop(settings.SESSION_CHOOSE_TRANSFER, None)
+
+def transaction(request):
+    usersess = request.session.get(settings.SESSION_USER, {})
+    if request.method == "POST":
+        sender = ""
+        for el in usersess:
+            sender = el['name']
+            senderSurname = el['surname']
+        recipient = request.POST.get("name")
+        recipientSurname = request.POST.get("surname")
+        whereFrom = request.POST.get("fromCard")
+        where = request.POST.get("numberCard")
+        if len(whereFrom)>19 or len(whereFrom) < 19: return redirect("transfer")
+        date = request.POST.get("date")
+        time = request.POST.get("time")
+        summ = request.POST.get("summ")
+        numberPhone = request.POST.get("numberPhone")
+        CardNameOfDepozit = FoundNameCard(where)
+        CardNameOffs = FoundNameCard(whereFrom)
+        
+        result1 = Payments(request, whereFrom, summ, CardNameOffs)
+        if result1 != "negative" or result1 != None :
+            Completion(where, summ, CardNameOfDepozit)
+
+            data = {
+                "where": where, "summ": summ, "whereFrom": whereFrom,
+                "date":date, "time": time, "numberPhone": numberPhone, "CardNameOffs": CardNameOffs,
+            }
+
+            transfer = Transfers(Sender= sender, Recipient = recipient, WhereFrom = whereFrom, Where = where, Date = date, Time = time, Summ = summ, 
+            CardNameOfDepozit = CardNameOfDepozit, CardNameOffs = CardNameOffs, SenderSurname = senderSurname, RecipientSurname = recipientSurname)
+
+            transfer.save()
+            return render(request, 'main/check.html', data)
+        else:
+            return redirect("transfer")
+
+
+def FoundNameCard(element):
+    CardDebit = DebitCard.objects.filter(numbercard = element).first()
+    CardCredit = CreditCard.objects.filter(numbercard = element).first()
+    CardPlatinum = PlatinumCard.objects.filter(numbercard = element).first()
+    answer =""
+    if CardDebit:
+        answer = "Upiter Debits"
+    elif CardCredit:
+        answer = "Upiter Credits"
+    elif CardPlatinum:
+        answer = "Upiter Platinum"
+    
+    return answer
+
+def Payments(request, whereFrom, summ, el1):
+    result = ""
+    if el1 == "Upiter Debits":
+        PayFrom = DebitCard.objects.filter(numbercard = whereFrom).first()
+        if float(PayFrom.Check) - float(summ) >= 0:
+            PayFrom.Check = round(float(PayFrom.Check) - float(summ), 8)
+            PayFrom.save()
+        else:
+            delSession(request)
+            result = "negative"
+    elif el1 == "Upiter Credits":
+        PayFrom = CreditCard.objects.filter(numbercard = whereFrom).first()
+        if float(PayFrom.Check) - float(summ) > float(PayFrom.Limit):
+            PayFrom.Check = round(float(PayFrom.Check) - float(summ), 8)
+            PayFrom.save()
+        else:
+            delSession(request)
+            result = "negative"
+    elif el1 == "Upiter Platinum":
+        PayFrom = PlatinumCard.objects.filter(numbercard = whereFrom).first()
+        if float(PayFrom.Check) - float(summ) > float(PayFrom.Limit):
+            PayFrom.Check = round(float(PayFrom.Check) - float(summ), 8)
+            PayFrom.save()
+        else:
+            delSession(request)
+            result = "negative"
+    return result
+
+
+    
+def Completion(where,summ ,el2):
+    if el2 == "Upiter Debits":
+        PayWhere = DebitCard.objects.filter(numbercard = where).first()
+    elif el2 == "Upiter Credits":
+        PayWhere = CreditCard.objects.filter(numbercard = where).first()
+    elif el2 == "Upiter Platinum":
+        PayWhere = PlatinumCard.objects.filter(numbercard = where).first()
+
+    PayWhere.Check = float(PayWhere.Check) + float(summ)
+    PayWhere.save()
+
+

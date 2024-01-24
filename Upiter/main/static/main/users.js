@@ -1,39 +1,51 @@
-var users = {{ ussers | safe }};
-        document.addEventListener('DOMContentLoaded', function() {
-// Функция для отображения пользователей
-            function displayUsers(users) {
-                console.log('Received users:', users);  
-                var container = document.getElementById('users');
-                container.innerHTML = '';  
-                for(var i = 0; i < Math.min(6,users.length); i++) {  
-                    var user = users[i];
-                    console.log('Displaying user:', user);
-                    var userDiv = document.createElement('div');  
-                    userDiv.className = 'people';
-                    userDiv.innerHTML = 
-                        '<div class="pip">' +
-                            '<form action="" method="post">' +
-                                '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
-                                '<input type="hidden" name="name" value="' + user.name + '">' +
-                                '<input type="hidden" name="surname" value="' + user.surname + '">' +
-                                '<input type="hidden" name="phone" value="' + user.phone + '">' +
-                                '<div class="block_photo">' +
-                                    '<button class="buttt" type="submit"><img class="peopimg" src="' + user.photo + '" alt=""></button>' +
-                                '</div>' +
-                            '</form>' +
-                            '<p class="people_name">' + user.name + '</p>' +
-                        '</div>';
-                    container.appendChild(userDiv);
-                }
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    var selectCard = document.getElementById('selectCard');
+    var options = selectCard.querySelectorAll('.getOptions');
+    var image = document.getElementById('img');
 
-            
-            displayUsers(users);
+    selectCard.addEventListener('change', ()=>{
+        const selectOption = selectCard.options[selectCard.selectedIndex];
+        const img = selectOption.getAttribute('data-img');
+        
+        image.src = img;
+    })
 
-            // Обработка поискового запроса
-            document.getElementById('search').addEventListener("change", function(event) {
-                event.preventDefault();
-                var searchInput = document.getElementById('search-input').value;
-                
-            });
-        });
+    options.forEach(function(option) {
+        var optionValue = option.value;
+        var lastFourDigits = optionValue.slice(-4);
+        option.textContent = "****" + lastFourDigits;
+    });
+
+    var currentDate = new Date().toISOString().slice(0, 10);
+    var currentTime = new Date().toTimeString().slice(0, 5);
+
+    // Устанавливаем текущую дату и время в поля ввода
+    document.getElementById('dateInput').value = currentDate;
+    document.getElementById('timeInput').value = currentTime;
+
+    console.log(currentDate);
+    console.log(currentTime);
+    
+
+    const cards = document.querySelectorAll('.SelectorCard');
+    const fromcard = document.getElementById("fromcard");
+    var SelectValue = ""
+    cards.forEach( card =>{
+        card.addEventListener('click', () => {
+            SelectValue = card.getAttribute("data-value");
+            fromcard.value = SelectValue;
+            console.log(fromcard.value);
+            cards.forEach(allElement =>{
+                if(allElement.classList.contains('press')){
+                    allElement.classList.remove('press');
+                }     
+            })
+            card.classList.add('press');
+        })
+    });
+    
+});
+
+
+
+

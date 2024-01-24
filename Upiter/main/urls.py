@@ -8,4 +8,9 @@ urlpatterns = [
     path('exit/', views.exit, name = "exit" ),
     path('loadImage/', views.loadImage, name = "loadImage" ),
     path('setpage/<str:name>/', views.setpage, name = "setpage"),
+    path('history/', views.history, name ="history"),
+    path('transfer/', views.transfer, name = "transfer"),
+    path("messenger/", views.messenger, name="messenger"),
+    path('selectTransfer/', views.selectTransfer, name ="selectTransfer"),
+    path("Transaction/", views.transaction,  name ="transaction"),
 ]

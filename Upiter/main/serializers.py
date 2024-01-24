@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Users
+from .models import Users, Transfers, ImageTransfers
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -12,3 +12,13 @@ class UserImage(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ['id', 'name', 'surname', 'phone', 'email', 'password', 'photo'] 
+
+class SerializeTransfers(serializers.ModelSerializer):
+    class Meta:
+        model = Transfers
+        fields = "__all__"
+
+class SerializeImages(serializers.ModelSerializer):
+    class Meta:
+        model = ImageTransfers
+        fields = "__all__"

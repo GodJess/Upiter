@@ -1,0 +1,219 @@
+{% extends 'main/main.html'%}
+{% load static %}
+
+{% block content %}
+<div class="upitertransfer ">
+    <div class="backup">
+        <div class="block-back">
+            <div  class="back"><a href = "{% url "setpage" "transaction"%}" class="a " id="transaction"><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+            <h2>Transaction</h2>
+        </div>
+    </div>
+    <div class="card-block">
+        <div class="card debit">
+            <div class="card-main">
+                <div class="card-header">
+                    <div class="card-name" ><p>{{debitcard.CardName}}</p></div>
+                    <div class="numberOfcard"><p class="ppp" data-value="{{debitcard.numbercard}}" id ="numbercard"></p></div>
+                </div>
+                <div class="card-check">
+                    <p class="valuta">$</p>
+                    <p class="money">{{debitcard.Check}}</p>
+                </div>
+                <div class="footer-card">
+                    <div class="cash-back">
+                        <img src="{{debitcard.ImageCB.url}}" alt="">
+                        <p>{{debitcard.CashBack}}</p>
+                    </div>
+                    <div class="payment-system">
+                        <img src="{{debitcard.ImagePaymentSys.url}}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="SelectorCard" data-value="{{debitcard.numbercard}}"></div>
+        </div>
+
+        <div class="card credit">
+            <div class="card-main">
+                <div class="card-header">
+                    <div class="card-name" ><p>{{creditcard.CardName}}</p></div>
+                    <div class="numberOfcard"><p class="ppp" data-value ="{{creditcard.numbercard}}" id ="numbercard"></p></div>
+                </div>
+                <div class="card-check">
+                    <p class="valuta">$</p>
+                    <p class="money">{{creditcard.Check}}</p>
+                </div>
+                <div class="footer-card">
+                    <div class="cash-back credits">
+                        <img src="{{creditcard.ImageCB.url}}" alt="">
+                        <p>{{creditcard.CashBack}}</p>
+                    </div>
+                    <div class="payment-system">
+                        <img src="{{creditcard.ImagePaymentSys.url}}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="SelectorCard" data-value="{{creditcard.numbercard}}"></div>
+        </div>
+        {% if platinumcard != 0 %}
+        <div class="card platinum">
+            <div class="card-main">
+                <div class="card-header">
+                    <div class="card-name" ><p>{{platinumcard.CardName}}</p></div>
+                    <div class="numberOfcard"><p class="ppp" data-value ="{{platinumcard.numbercard}}"></p></div>
+                </div>
+                <div class="card-check">
+                    <p class="valuta">$</p>
+                    <p class="money">{{platinumcard.Check}}</p>
+                </div>
+                <div class="footer-card">
+                    <div class="cash-back ">
+                        <img src="{{platinumcard.ImageCB.url}}" alt="">
+                        <p>{{platinumcard.CashBack}}</p>
+                    </div>
+                    <div class="payment-system">
+                        <img src="{{platinumcard.ImagePaymentSys.url}}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="SelectorCard" data-value="{{platinumcard.numbercard}}"></div>
+        </div>
+        {% else %}
+        <div class="card addplatinum">
+            <div class="card-main"></div>
+        </div>
+        {% endif %}
+    </div>
+    {% if length_choose_transfer == 0 %}
+    <div class="users" id ="users">
+    </div>
+    <div class="block-enter">
+        <div class="blockenter">
+            <form class="form" action="" id="search">
+                {% csrf_token %}
+                <div class="block-input">
+                    <div class="inputblock">
+                        <input type="text" id="search-input" class="input" placeholder="Enter card or phone number">
+                        <a href="#" class="scan"><img class="scanimg" src="{% static 'main/Frame (2).png' %}" alt=""></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class ="blocktrans">
+        <div class="main-block-transfer">
+            <form action="{% url "transaction" %}" method="post">
+                {% csrf_token %}
+                <div class="block-number-card">
+                    <img src="{{selected_user.photo.url}}" class="img-user" alt="">
+                    <div class="block-name-card">
+                        <div class="owner">
+                            <p>to {{selected_user.name}}</p>
+                        </div>
+                        <div class="select-card">
+                            <select name="numberCard" id="selectCard">
+                                <option data-img="{{transferDebit.ImagePaymentSys.url}}" class="getOptions" value="{{transferDebit.numbercard}}"></option>
+                                <option data-img="{{transferCredit.ImagePaymentSys.url}}" class="getOptions" value="{{transferCredit.numbercard}}"></option>
+                                {% if transferPlatinum != 0 %}
+                                <option data-img="{{transferPlatinum.ImagePaymentSys.url}}" class="getOptions" value="{{transferPlatinum.numbercard}}"></option>
+                                {% endif %}
+                            </select>
+                            <img id="img" src="{{transferDebit.ImagePaymentSys.url}}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-price">
+                    <input class="summ" name="summ" type="text" autocomplete="off"  placeholder="$ 0.00">
+                </div>
+                    <input type="hidden" name="name" value="{{selected_user.name}}">
+                    <input type="hidden" name="numberPhone" value="{{selected_user.phone}}">
+                    <input type="hidden" name="surname" value="{{selected_user.surname}}">
+                    <input type="hidden" id="fromcard" name="fromCard">
+                    <input class="inp" id="dateInput" type="date" name="date" readonly>
+                    <input class="inp" id="timeInput" type="time" name="time" readonly>
+                    <button type="submit" class="tarnbth">Transfer</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    <div class="opacity-block"></div>
+</div>
+{% endblock %}
+
+{% block script%}
+<script > 
+    var users = {{ ussers | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+// Функция для отображения пользователей
+        function displayUsers(users) {
+            console.log('Received users:', users);  
+            var container = document.getElementById('users');
+            container.innerHTML = '';  
+            for(var i = 0; i < Math.min(6,users.length); i++) {  
+                var user = users[i];
+                console.log('Displaying user:', user);
+                var userDiv = document.createElement('div');  
+                userDiv.className = 'people';
+                userDiv.innerHTML = 
+                    '<div class="pip">' +
+                        '<form action="{% url "selectTransfer" %}" method="post">' +
+                            ' {% csrf_token %} '+
+                            '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                            '<input type="hidden" name="name" value="' + user.name + '">' +
+                            '<input type="hidden" name="surname" value="' + user.surname + '">' +
+                            '<input type="hidden" name="phone" value="' + user.phone + '">' +
+                            '<div class="block_photo">' +
+                                '<button class="buttt" type="submit"><img class="peopimg" src="' + user.photo + '" alt=""></button>' +
+                            '</div>' +
+                        '</form>' +
+                        '<p class="people_name">' + user.name + '</p>' +
+                    '</div>';
+                container.appendChild(userDiv);
+            }
+        }
+
+        function displayUsersSearch(users, param) {
+            console.log('Received users:', users);  
+            var container = document.getElementById('users');
+            container.innerHTML = '';  
+            for(var i = 0; i < Math.min(6,users.length); i++) {  
+                var user = users[i];
+                if(user.phone.includes(param)){
+                    console.log('Displaying user:', user);
+                    var userDiv = document.createElement('div');  
+                    userDiv.className = 'people';
+                    userDiv.innerHTML = 
+                        '<div class="pip">' +
+                            '<form action="{% url "selectTransfer" %}" method="post">' +
+                                '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                                '<input type="hidden" name="name" value="' + user.name + '">' +
+                                '<input type="hidden" name="surname" value="' + user.surname + '">' +
+                                '<input type="hidden" name="phone" value="' + user.phone + '">' +
+                                '<div class="block_photo">' +
+                                    '<button class="buttt" type="submit"><img class="peopimg" src="' + user.photo + '" alt=""></button>' +
+                                '</div>' +
+                            '</form>' +
+                            '<p class="people_name">' + user.name + '</p>' +
+                        '</div>';
+                    container.appendChild(userDiv);
+                }
+                
+            }
+        }
+        displayUsers(users);
+        
+        
+
+        // Обработка поискового запроса
+        document.getElementById('search').addEventListener("input", (event) => {
+            event.preventDefault();
+            var searchInput = document.getElementById('search-input').value;
+            if(searchInput.trim() != ""){
+                displayUsersSearch(users, searchInput);
+            }
+            
+        });
+    });
+</script>
+{% endblock%}
