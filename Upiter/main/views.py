@@ -3,6 +3,7 @@ from .utils import  get_alternative_assets
 from django.conf import settings
 from main.models import Users, DebitCard, CreditCard, PlatinumCard, Transfer, Transfers, ImageTransfers
 from .serializers import serialize_user_data, UserImage, SerializeTransfers, SerializeImages
+from django.views.decorators.csrf import requires_csrf_token
 import json
 # Create your views here.
 def slider(request):
@@ -106,7 +107,7 @@ def history(request):
     }
     return render(request, "main/history.html",  data)
 
-
+@requires_csrf_token
 def transfer(request):
     usersess = request.session.get(settings.SESSION_USER, {})
     choose_transfer = request.session.get(settings.SESSION_CHOOSE_TRANSFER, {})

@@ -145,6 +145,29 @@
 <script > 
     var users = {{ ussers | safe }};
     document.addEventListener('DOMContentLoaded', function() {
+
+        function getCSRFToken() {
+            return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        }
+        
+        function sendAjaxRequest() {
+            // Получаем актуальный CSRF токен перед отправкой AJAX запроса
+            var csrftoken = getCSRFToken();
+        
+            $.ajax({
+                url: '/your-url/',
+                type: 'POST',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+                success: function(data) {
+                    // Обработка успешного ответа
+                },
+                error: function(err) {
+                    // Обработка ошибки
+                }
+            });
+        }
 // Функция для отображения пользователей
         function displayUsers(users) {
             console.log('Received users:', users);  
@@ -158,8 +181,7 @@
                 userDiv.innerHTML = 
                     '<div class="pip">' +
                         '<form action="{% url "selectTransfer" %}" method="post">' +
-                            ' {% csrf_token %} '+
-                            '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                            '<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"> '+
                             '<input type="hidden" name="name" value="' + user.name + '">' +
                             '<input type="hidden" name="surname" value="' + user.surname + '">' +
                             '<input type="hidden" name="phone" value="' + user.phone + '">' +
@@ -186,7 +208,7 @@
                     userDiv.innerHTML = 
                         '<div class="pip">' +
                             '<form action="{% url "selectTransfer" %}" method="post">' +
-                                '<input type="hidden" name="csrfmiddlewaretoken" value="hQZSTf55qK00xUUTpmUEefrMq2PAqb7rcUmpUNPqt8ZggCJ49KQVpczsENoxWaUX">' +
+                                '<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"> ' +
                                 '<input type="hidden" name="name" value="' + user.name + '">' +
                                 '<input type="hidden" name="surname" value="' + user.surname + '">' +
                                 '<input type="hidden" name="phone" value="' + user.phone + '">' +
@@ -214,6 +236,9 @@
             }
             
         });
+
+
+
     });
 </script>
 {% endblock%}
