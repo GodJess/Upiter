@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-{% if pagelen == 0 %}
+
 <div class = "upitermain open">
         <div class="greeting"><h1>Welcome {% for el in usersess %}{{el.name}}! {% endfor%}</h1></div>
         {% comment %} Блок с картами {% endcomment %}
@@ -145,32 +145,8 @@
 </div>
 
 {% comment %} Страница транзакций {% endcomment %}
-{% elif page == "transaction"%}
-<div class= "transaction">
-    <div class="block-transaction">
-        <div class="transac-header"><h1 class="h1">Transaction</h1></div>
-        <div class="transac-main">
 
-            <div class="block-operation">
-                <div class = "show"><div class="show-logo"><ion-icon class="icon" name="reader-outline"></ion-icon></div></div>
-                <div class="show-name"><p>Taxes</p></div>
-            </div>
-            <div class="block-operation">
-                <div class = "show"><div class="show-logo"><ion-icon class="icon bitcoin" name="logo-bitcoin"></ion-icon></div></div>
-                <div class="show-name"><p>Crypto investments</p></div>
-            </div>
-            <div class="block-operation">
-                <div class = "show"><div class="show-logo "  id = "upitertransfer"><a href="{% url 'transfer' %}"><ion-icon class="icon" name="swap-horizontal-outline"></ion-icon></a></div></div>
-                <div class="show-name"><p>Quick transfers</p></div>
-            </div>
-            <div class="block-operation">
-                <div class = "show"><div class="show-logo"><ion-icon class="icon" name="reload-outline"></ion-icon></div></div>
-                <div class="show-name"><p>Auto payments</p></div>
-            </div>
 
-        </div>
-    </div>
-</div>
 
-{% endif %}
+
 {% endblock%}

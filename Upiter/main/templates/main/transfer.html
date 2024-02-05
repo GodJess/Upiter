@@ -5,7 +5,7 @@
 <div class="upitertransfer ">
     <div class="backup">
         <div class="block-back">
-            <div  class="back"><a href = "{% url "setpage" "transaction"%}" class="a " id="transaction"><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+            <div  class="back"><a href = "{% url "PTransac" %}" class="a " id="transaction"><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
             <h2>Transaction</h2>
         </div>
     </div>
@@ -199,7 +199,7 @@
             console.log('Received users:', users);  
             var container = document.getElementById('users');
             container.innerHTML = '';  
-            for(var i = 0; i < Math.min(6,users.length); i++) {  
+            for(var i = 0; i < users.length; i++) {  
                 var user = users[i];
                 if(user.phone.includes(param)){
                     console.log('Displaying user:', user);
@@ -233,6 +233,9 @@
             var searchInput = document.getElementById('search-input').value;
             if(searchInput.trim() != ""){
                 displayUsersSearch(users, searchInput);
+            }
+            else{
+                displayUsers(users);
             }
             
         });

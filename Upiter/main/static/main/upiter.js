@@ -32,4 +32,36 @@ elements.forEach((element)=> {
   element.textContent = processValue(element);
 });                                           
 
+// const allElements = document.querySelectorAll('.element');
+
+// // Добавляем обработчик события для каждого элемента
+// allElements.forEach(elem => {
+//     elem.addEventListener('click', function() {
+//  // Получаем id элемента
+//     const id = this.id;
+//     console.log(id);
+
+// //     // Находим элементы с классом, соответствующим id
+//     const targetElements = document.querySelectorAll('.' + id);
+//     console.log(targetElements);
+
+//     // Добавляем класс "open" к найденным элементам
+//     targetElements.forEach(targetElement => {
+//        if (!targetElement.classList.contains('open')) {
+//          targetElement.classList.add('open');
+//       }
+//      });
+
+//      // Удаляем класс "open" у всех остальных элементов
+//     allElements.forEach(otherElement => {
+//        if (otherElement.id !== id) {
+//         const otherTargetElements = document.querySelectorAll('.' + otherElement.id);
+//         otherTargetElements.forEach(otherTargetElement => {
+//             otherTargetElement.classList.remove('open');
+//          });
+//       }
+//     });
+  
+//   });
+// });
 

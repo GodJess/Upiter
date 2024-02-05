@@ -8,6 +8,8 @@
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'main/upiter.css' %}">
     <link rel="stylesheet" href="{% static 'main/another.css' %}">
+    {% block link%}
+    {% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -52,10 +54,10 @@
         </div>
         <div class="futer">
             <div class="fut-block">
-                <div class="icon-link"><a href="{% url "setpage" 'home'%}" class="element" id ="upitermain"><ion-icon class = "icons" name="home-outline"></ion-icon></a></div>
-                <div class="icon-link"><a href="{% url 'history' %}" class="element" id ="upiterhistory"><ion-icon class = "icons"  name="timer-outline"></ion-icon></a></div>
-                <div class="icon-link"><a href="{% url 'setpage' "transaction"%}" class="element" id="transaction" ><ion-icon class = "icons"  name="repeat-outline"></ion-icon></a></div>
-                <div class="icon-link"><a href="{% url 'messenger' %}" class="element" id ="upitermesseg"><ion-icon class = "icons" name="chatbubble-outline"></ion-icon></i></a></div>
+                <div class="icon-link"><a href="{% url "upiter" %}" class="element" id ="upitermain"><ion-icon class = "icons" name="home-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'history' %}" class="" id ="upiterhistory"><ion-icon class = "icons"  name="timer-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'PTransac' %}" class="element" id="transaction" ><ion-icon class = "icons"  name="repeat-outline"></ion-icon></a></div>
+                <div class="icon-link"><a href="{% url 'messenger' %}" class="" id ="upitermesseg"><ion-icon class = "icons" name="chatbubble-outline"></ion-icon></i></a></div>
             </div>
         </div>
     </div>

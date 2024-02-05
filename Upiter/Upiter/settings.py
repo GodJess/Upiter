@@ -27,11 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# SESSION
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_USER = "usersess"
 SESSION_PAGE ="page"
 SESSION_CHOOSE_TRANSFER = "choose_transfer"
+MESSEGE_CHOOSE_USER = "choose_user"
 # Application definition
 
 INSTALLED_APPS = [

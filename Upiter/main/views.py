@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .utils import  get_alternative_assets
 from django.conf import settings
-from main.models import Users, DebitCard, CreditCard, PlatinumCard, Transfer, Transfers, ImageTransfers
-from .serializers import serialize_user_data, UserImage, SerializeTransfers, SerializeImages
+from main.models import Users, DebitCard, CreditCard, PlatinumCard, Transfer, Transfers, ImageTransfers, Messenger
+from .serializers import serialize_user_data, UserImage, SerializeTransfers, SerializeImages, SerlMessage
 from django.views.decorators.csrf import requires_csrf_token
 import json
 # Create your views here.
@@ -65,7 +65,7 @@ def upiter(request):
     creditcard = ""
     platinumcard = "" 
     if len(usersess) > 0:
-        users = Users.objects.all()[:7]
+        users = Users.objects.all()[:6]
         for el in usersess:
             name = el['name']
             surname = el['surname']
@@ -106,6 +106,16 @@ def history(request):
         "usersess": usersess, "length": length, "transfers":transferss, "sender": sender1, "sendersur": sendersur1, "images": images, "histtransfer": histtransfer,
     }
     return render(request, "main/history.html",  data)
+
+def pageTransaction(request):
+    usersess = request.session.get(settings.SESSION_USER, {})
+    length = len(usersess)
+
+    data ={
+        "usersess": usersess, "length": length,
+    }
+    return render(request, "main/transaction.html",  data)
+
 
 @requires_csrf_token
 def transfer(request):
@@ -151,13 +161,72 @@ def transfer(request):
 
 def messenger(request):
     delSession(request)
+    choose_user = request.session.get(settings.MESSEGE_CHOOSE_USER, {})
     usersess = request.session.get(settings.SESSION_USER, {})
     length = len(usersess)
+    userPhone = ""
+    userName = ""
+    choose_user_phone = ""
+    message_send_user =""
+    message_get_user =""
+    phones = ""
+    choose_user_phones = ""
+
+    if len(usersess) > 0:
+        serialized_users = json.dumps(UserImage(Users.objects.all(), many=True).data)
+        for el in usersess:
+            userPhone = json.dumps(el['numberphone'])
+            userName = json.dumps(el['name'])
+            phones = el['numberphone']
+            print(phones)
+
+    if len(choose_user) > 0:    
+        for el in choose_user:
+            choose_user_phone = json.dumps(el["phones"])
+            choose_user_phones = el['phones']
+            print(choose_user_phones)
+
+    message_send_user = json.dumps(SerlMessage(Messenger.objects.filter(Sender = choose_user_phones, Recipient = phones ), many = True).data)
+    message_get_user = json.dumps(SerlMessage(Messenger.objects.filter(Sender = phones, Recipient = choose_user_phones ), many = True ).data)
+
     data ={
-        "usersess": usersess, "length": length,
+        "usersess": usersess, "length": length, "serialized_users": serialized_users, "userName": userName, "userPhone": userPhone, "choose_user_phone": choose_user_phone,
+        "message_send_user" : message_send_user, "message_get_user": message_get_user,
     }
     return render(request, "main/messenger.html", data)
 
+def SetUsers(request):
+    choose_user = request.session.get(settings.MESSEGE_CHOOSE_USER, {})
+
+    if request.method == "POST":
+        choose_user = request.session.pop(settings.MESSEGE_CHOOSE_USER, None)
+        choose_user = []
+        name = request.POST.get("userName-choose")
+        phone = request.POST.get("userPhone-choose")
+
+        choose_user.append({
+            "name": name, "phones": phone
+        })
+
+        request.session[settings.MESSEGE_CHOOSE_USER] = choose_user
+    return redirect("messenger")
+
+def addMessage(request):
+    choose_user = request.session.get(settings.MESSEGE_CHOOSE_USER, {})
+    usersess = request.session.get(settings.SESSION_USER, {})
+    if request.method == "POST":
+        text = request.POST.get("text")
+        date = request.POST.get("date")
+        time = request.POST.get("time")
+
+        for el in choose_user:
+            recipient = el['phones']
+        for user in usersess:
+            sender = user['numberphone']
+            message = Messenger(Sender=sender, Recipient=recipient, message=text, Date=date, Time=time)
+            message.save()
+
+    return redirect("messenger")
 
 def exit(request):
     delSession(request)
@@ -253,6 +322,7 @@ def transaction(request):
             CardNameOfDepozit = CardNameOfDepozit, CardNameOffs = CardNameOffs, SenderSurname = senderSurname, RecipientSurname = recipientSurname)
 
             transfer.save()
+            delSession(request)
             return render(request, 'main/check.html', data)
         else:
             return redirect("transfer")

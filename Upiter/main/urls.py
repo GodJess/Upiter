@@ -13,4 +13,7 @@ urlpatterns = [
     path("messenger/", views.messenger, name="messenger"),
     path('selectTransfer/', views.selectTransfer, name ="selectTransfer"),
     path("Transaction/", views.transaction,  name ="transaction"),
+    path('transactionPage/', views.pageTransaction, name = "PTransac"),
+    path('SetUsers/', views.SetUsers, name = 'SetUsers'),
+    path('addMessage/', views.addMessage, name = 'addMessage'),
 ]

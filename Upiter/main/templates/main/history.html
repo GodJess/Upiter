@@ -5,7 +5,7 @@
 <div class="upiterhistory">
     <div class="backup">
         <div class="block-back">
-            <div  class="back"><a href="{% url "setpage" "home"%}" class="a" id="upitermain" ><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
+            <div  class="back"><a href="{% url "upiter" %}" class="a" id="upitermain" ><ion-icon class="iconback" name="arrow-back-outline"></ion-icon></a></div>
             <h2>Home</h2>
         </div>
     </div>
@@ -17,7 +17,7 @@
             <form class="form" action="" autocomplete="off">
                 {% csrf_token %}
                 <div class="block-btn">
-                    <button class="searchbtn" type="submit"><ion-icon class="lupa" name="search-outline"></ion-icon></button>
+                    <button class="searchbtn" type="button"><ion-icon class="lupa" name="search-outline"></ion-icon></button>
                 </div>
                 <div class="blocksearch">
                     <input class="search" type="text" placeholder="Search" name="search" autocomplete="off">
@@ -26,61 +26,24 @@
             </form>
         </div>
     </div></br>
-    <div class="block-transactions">
-        
-        <div class="transactions">
-            <div class="firsttran">
-                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
-                <div class="trandate">
-                    <div class="p1"><p>Vinnie</p></div>
-                     <div class="p2"><p>7 Jan 8:00</p></div>
-                </div>
-            </div>
-            <div class="tranfrom">
-               <div class="p1"><p>From:</p></div>  
-                <div class="p2"><p>Upiter Debits ****2023</p></div>
-            </div>
-            <div class="transumm">-2,500 $</div>
+    <div class="block-transac-analitic">
+        <div class="block-transactions">
+            {% comment %} Delete {% endcomment %}
+            
         </div>
-        
-        <div class="transactions">
-            <div class="firsttran">
-                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96.png'%}" alt=""></div>
-                <div class="trandate">
-                    <div class="p1"><p>Dylan</p></div>
-                     <div class="p2"><p>12 Jan 7:50</p></div>
-                </div>
+        <div class="block-diagrams">
+            <div class="circle">
+                <canvas id="myChart"></canvas>
             </div>
-            <div class="tranfrom">
-               <div class="p1"><p>From:</p></div>  
-                <div class="p2"><p>Upiter Premium ****4380</p></div>
-            </div>
-            <div class="transumm">-2,500 $</div>
         </div>
-
-        <div class="transactions">
-            <div class="firsttran">
-                <div class="tranicons"><img class = "arrow" src="{% static 'main/Group 96 (1).png'%}" alt=""></div>
-                <div class="trandate">
-                    <div class="p1"><p>Jay</p></div>
-                     <div class="p2"><p>15 Jan 22:50</p></div>
-                </div>
-            </div>
-            <div class="tranfrom">
-               <div class="p1"><p>From:</p></div>  
-                <div class="p2"><p>Upiter Premium ****4693</p></div>
-            </div>
-            <div class="transumm">+1,999 $</div>
-        </div>
-        {% comment %} Delete {% endcomment %}
-        
-
     </div>
     <div class="opacity-block"></div>
 </div>
 {% endblock%}
 
 {% block script%}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var transferss = {{ transfers | safe}};
@@ -128,8 +91,9 @@
         const AddHistoryElement = (el, sender, sendersur) =>{
             container = document.querySelector(".block-transactions");
             container.innerHTML = '';
+            var send = 0;
             for(var i = 0; i < el.length ; i++){
-                historyEl = el[i];
+                var historyEl = el[i];
                 console.log(historyEl)
                 if(historyEl.Sender == sender && historyEl.SenderSurname == sendersur ){
                     photo = CheckImage(images, "Up");
@@ -146,10 +110,39 @@
                 }
                 
             }
+            SetImage();
+            SetDateTime();
+        }
+
+        const SearchAddHistoryElement = (el, sender, sendersur, param) =>{
+            container = document.querySelector(".block-transactions");
+            container.innerHTML = '';
+            var send = 0;
+            for(var i = 0; i < el.length ; i++){
+                var historyEl = el[i];
+                console.log(historyEl)
+                if(historyEl.Recipient.includes(param) || historyEl.RecipientSurname.includes(param) || historyEl.Sender.includes(param) || historyEl.SenderSurname.includes(param)){
+                    if(historyEl.Sender == sender && historyEl.SenderSurname == sendersur ){
+                        photo = CheckImage(images, "Up");
+                        symbol = "-";
+                        card = "****" + (historyEl.WhereFrom.substring(historyEl.WhereFrom.length - 4));
+                        pattern(container, photo, historyEl, symbol, card);
+                    }
+                    if(historyEl.Recipient == sender && historyEl.RecipientSurname == sendersur)
+                    {
+                        photo = CheckImage(images, "Down");
+                        symbol = " ";
+                        card = "****" + (historyEl.WhereFrom.substring(historyEl.WhereFrom.length - 4));
+                        pattern(container, photo, historyEl, symbol, card);
+                    }
+                }
+            }
+            SetImage();
+            SetDateTime();
         }
 
         const pattern = (container, photo, mass, symbol, card)=>{
-            hisEl = document.createElement("div");
+            var hisEl = document.createElement("div");
                 hisEl.className = "transactions"
                 hisEl.innerHTML = 
                 '<div class="firsttran">'+
@@ -165,6 +158,10 @@
                     '</div>' +
                     '<div class="transumm">'+ symbol + mass.Summ +" $" +'</div>' +
                 '</div>';
+                SetDateTime();
+                
+                
+
             container.appendChild(hisEl);
         }
         function CheckImage(images, el){
@@ -181,26 +178,94 @@
             
         }
         AddHistoryElement(sortedTransfers, sender, sendersur);
-
-        const imageArrows = document.querySelectorAll('.arrow');
-        imageArrows.forEach(imageArrow => {
-            imageArrow.src = imageArrow.getAttribute("data-img");
+        
+        document.querySelector(".form").addEventListener("input", (event) =>{
+            event.preventDefault();
+            var el = document.querySelector(".search").value;
+            if (el.trim() != ""){
+                SearchAddHistoryElement(sortedTransfers, sender, sendersur, el);
+            }
+            else{
+                AddHistoryElement(sortedTransfers, sender, sendersur);
+            }
         });
-        const dateTimes = document.querySelectorAll('.DateTime');
-        dateTimes.forEach( dateTime =>{
-            var date = new Date(dateTime.getAttribute("data-value"));
-            var time = dateTime.getAttribute("data-time").substring(0,5);
+   
+        function SetImage(){
+            const imageArrows = document.querySelectorAll('.arrow');
+            imageArrows.forEach(imageArrow => {
+                imageArrow.src = imageArrow.getAttribute("data-img");
+            });
+        }
+        
+        function SetDateTime(){
+            const dateTimes = document.querySelectorAll('.DateTime');
+                dateTimes.forEach( dateTime =>{
+                    var date = new Date(dateTime.getAttribute("data-value"));
+                    var time = dateTime.getAttribute("data-time").substring(0,5);
 
 
-            let dayOfMonth = date.getDate();
-            let monthNames = ['jan', 'Feb', 'Mar', 'Apr',
-             'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
-              'Nov', 'Dec'];
-            
-            let monthName = monthNames[date.getMonth()];
-            let result = dayOfMonth + ' ' + monthName;
-            dateTime.textContent = result + " " + time;
-        })
+                    let dayOfMonth = date.getDate();
+                    let monthNames = ['jan', 'Feb', 'Mar', 'Apr',
+                    'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+                    'Nov', 'Dec'];
+                    
+                    let monthName = monthNames[date.getMonth()];
+                    let result = dayOfMonth + ' ' + monthName;
+                    dateTime.textContent = result + " " + time;
+                });
+        }
+
+        const GetSumm = (el, sender, sendersur) =>{
+            var get = 0;
+            for(var i = 0; i < el.length ; i++){
+                var historyEl = el[i];
+                if(historyEl.Recipient == sender && historyEl.RecipientSurname == sendersur)
+                {
+                    get += parseFloat(historyEl.Summ);
+                }
+                
+            }
+            return get;
+        }
+
+        const SendSumm = (el, sender, sendersur) =>{
+            var send = 0;
+            for(var i = 0; i < el.length ; i++){
+                var historyEl = el[i];
+                if(historyEl.Sender == sender && historyEl.SenderSurname == sendersur )
+                {
+                    send += parseFloat(historyEl.Summ);
+                }
+                
+            }
+            return send;
+        }
+
+        var get = GetSumm(sortedTransfers, sender, sendersur);
+        var send = SendSumm(sortedTransfers, sender, sendersur);
+        console.log(" Полученно: " + get);
+        console.log("Отправленно: " + send);
+        const ctx = document.getElementById('myChart').getContext("2d");
+        let myChar = new Chart(ctx, {
+            type: "pie",
+            data:{
+                labels: ['send', 'get'],
+                datasets:[{
+                    label: "Transactions",
+                    data: [send, get],
+                    backgroundColor: ["#9300FF", "#23ff00"],
+                    borderColor: [send, get],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: true,
+                responsive: true,
+                height: 100, 
+                width: 100   
+            }
+        });
 });
+        
 </script>
 {% endblock %}

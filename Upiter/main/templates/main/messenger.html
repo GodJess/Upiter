@@ -1,10 +1,295 @@
 {% extends 'main/main.html' %}
 {% load static %}
 
-{% block content %}
+{% block link%}
+<link rel="stylesheet" href="{% static 'main/messenger.css' %}">
+{% endblock %}
 
+{% block content %}
+    <div class="block-messeg">
+        <div class="block-listusers">
+            <div class="search">
+                <div class="search-block">
+                    <form class="formSearch">
+                    <button type="button" class="butsearch"><ion-icon class="icon-search" name="search-outline"></ion-icon> </button>
+                    <input class="inpSearch" type="text" placeholder="Search">
+                    </form>
+                </div>
+            </div>
+            <div class="list">
+
+
+
+
+            </div>
+        </div>
+        <div class="main-messeg">
+            
+            <div class="realtime-messege-users">
+
+
+
+            </div>
+            <div class="block-input-information">
+                <div class="fron-input-messege">
+                    <form class="block-clip" action="">
+                        <button class="paper-clip" type="button"><ion-icon class="clip" name="attach-outline"></ion-icon></button>
+                    </form>
+                    <form  class="block-inp-mes" action="{%  url 'addMessage' %}" method="post">
+                        {% csrf_token %}
+                        <!-- <input class="input-messege"  type="text" placeholder="Enter text">  -->
+                        <textarea class="input-messege" placeholder="Enter text" name="text" id="" cols="30" rows="30"></textarea>
+                        <input class="inp" id="dateInput" type="date" name="date" readonly>
+                        <input class="inp" id="timeInput" type="time" name="time" readonly>
+                        <button type="submit" class="send-submit">Send</button>
+                    </form>
+                    <form class="block-micro" action="">
+                        <button class="button-micro" type="button"><ion-icon class="micro" name="mic-outline"></ion-icon></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="opacity-block"></div>
 {% endblock %}
 
 {% block script%}
+    <script>
+    window.onload = function() {
+        var element = document.querySelector('.realtime-messege-users');
+        element.scrollTop = element.scrollHeight;
+        
+    }
+        var currentDate = new Date().toISOString().slice(0, 10);
+        var currentTime = new Date().toTimeString().slice(0, 5);
 
+        // Устанавливаем текущую дату и время в поля ввода
+        document.getElementById('dateInput').value = currentDate;
+        document.getElementById('timeInput').value = currentTime;
+
+        console.log(currentDate);
+        console.log(currentTime);
+    </script>
+    <script>
+        var users = {{ serialized_users | safe }}
+        var userName = {{ userName | safe}}
+        var userPhone = {{ userPhone | safe }}
+
+        function getCSRFToken() {
+            return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        }
+        
+        function sendAjaxRequest() {
+            // Получаем актуальный CSRF токен перед отправкой AJAX запроса
+            var csrftoken = getCSRFToken();
+        
+            $.ajax({
+                url: '/your-url/',
+                type: 'POST',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+                success: function(data) {
+                    // Обработка успешного ответа
+                },
+                error: function(err) {
+                    // Обработка ошибки
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const  displayUsers = () =>{
+                var list = document.querySelector(".list");
+                list.innerHTML = "";
+                for(var i = 0; i < users.length; i++){
+                    var user = users[i];
+                    
+                    CheckUser(user, list, userName, userPhone);
+                      
+                }
+            }
+            
+            const  SearchdisplayUsers = (el) =>{
+                var list = document.querySelector(".list");
+                list.innerHTML = "";
+                for(var i = 0; i < users.length; i++){
+                    var user = users[i];
+                    if(el.startsWith("8")){
+                        if(user.phone.includes(el)){
+                            CheckUser(user, list, userName, userPhone);
+                        }
+                    }
+                    else{
+                        if(user.name.includes(el)){
+                            CheckUser(user, list, userName, userPhone);
+                        }
+                    }
+                      
+                }
+            }
+            const CheckUser = (user, list, userName, userPhone) =>{
+                if(user.name == userName && user.phone == userPhone){
+                    var img = "https://cdn.icon-icons.com/icons2/903/PNG/512/bookmark_icon-icons.com_69556.png";
+                    name = "Saved";
+                }
+                else{
+                    var img = user.photo;
+                    name = user.name;
+                }
+                selectUsers( user, list, img, name);
+            }
+            document.querySelector(".formSearch").addEventListener("input", (event)=>{
+                event.preventDefault();
+                var el = document.querySelector(".inpSearch").value;
+                if(el.trim() != ""){
+                    SearchdisplayUsers(el);
+                }
+                else{
+                    displayUsers();
+                }
+            } )
+
+            const selectUsers = (user, list, img, name) =>{
+                var UserBlock = document.createElement('div');
+                UserBlock.className = "block-user-messeg";
+                UserBlock.innerHTML = 
+                        '<img class="messege-user-image" src="' + img + '" alt="">' +
+                        '<div class="masseg-description">' +
+                            '<div class="messege-name-data">' +
+                                '<p>'+ name + '</p>' +
+                                '<p>01.02.23</p>' +
+                            '</div>' +
+                            '<div class="last-messege">' +
+                                '<p>Hey, give me $43</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="block-submit">' +
+                            '<form action="{% url 'SetUsers' %}" method="post" class="block-submit-form">' +
+                                '<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"> '+
+                                '<input type="hidden" name="userName-choose" value="'+ user.name +'"> ' +
+                                '<input type="hidden" name="userPhone-choose" value="'+ user.phone +'"> ' +
+                                '<button type="submit" class="submit-choose">'+
+                                '</button>' +
+                            '</form>' +
+                        '</div>'    
+                list.appendChild(UserBlock);  
+            }
+
+            displayUsers();
+
+
+        });
+    </script>
+    <script>
+        var users = {{ serialized_users | safe }}
+        var userName = {{ userName | safe}}
+        var userPhone = {{ userPhone | safe }}
+        var choose_user_phone = {{ choose_user_phone | safe}}
+        var message_send_user = {{ message_send_user | safe}}
+        var message_get_user = {{ message_get_user | safe}}
+
+        if(userPhone)
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var filter_message1 = [];
+        var filter_message2 = [];
+
+        const JoinMessage = (el) =>{
+            for(var i = 0; i < el.length; i++){
+                filter_message1.push(el[i]);
+            }
+        }
+
+
+        JoinMessage(message_get_user);
+        JoinMessage(message_send_user);
+        console.log(filter_message1);
+
+        for(var i = 0; i < filter_message1.length; i++){
+            if (filter_message2.some(item => item.id === filter_message1[i].id)) {
+                continue;
+            } else {
+                filter_message2.push(filter_message1[i]);
+            }
+        }
+
+        const sortByDateTime = (el) => {
+            return el.sort((a, b) => {
+                if(a.Date > b.Date){
+                    return 1;
+                }
+                if(a.Date < b.Date){
+                    return -1 ;
+                }
+                if(a.Time > b.Time){
+                    return 1;
+                }
+                if(a.Time < b.Time){
+                    return -1;
+                }
+            })
+        }
+
+        var messages = sortByDateTime(filter_message2);
+        console.log(messages);
+
+        const LoadIMG = (users, el) => {
+            var img = 0;
+            for(var i = 0; i < users.length; i++){
+                var user = users[i];
+                if(user.phone == el){
+                    img = user.photo;
+                }
+
+            }
+            return img;
+        }
+        
+        const inputMessage = (messages, users, userPhone, choose_user_phone) =>{
+            var listmess = document.querySelector(".realtime-messege-users");
+            listmess.innerHTML = "";
+            for(var i = 0; i < messages.length; i++){
+                var message = messages[i];
+                if(message.Sender == userPhone){
+                    var img = LoadIMG(users, userPhone);
+                    console.log(img)
+                    var Mes = document.createElement("div");
+                    Mes.className = "my-messages-blk";
+                    Mes.innerHTML =  
+                        '<div class="mess-data">' +
+                            '<p>' + message.message + '</p>' +
+                        '</div>' +
+                        '<img class="mess-img-user" src="'+ img + '" alt="">';
+                    listmess.appendChild(Mes);
+
+                }
+                else if(message.Sender == choose_user_phone){
+                    if(message.Recipient == message.Sender){
+                        var img = "https://cdn.icon-icons.com/icons2/903/PNG/512/bookmark_icon-icons.com_69556.png";
+                    }
+                    else{
+                        var img = LoadIMG(users, choose_user_phone);
+                    }
+                    var Mes = document.createElement("div");
+                    Mes.className = "user-messages-blk";
+                    Mes.innerHTML = 
+                        '<img img class="mess-img-user" width="80px" height="80px" src="'+ img +'" alt="">' +
+                        '<div class="mess-data">' +
+                            '<p>' + message.message + '</p>' +
+                        '</div>'
+                    listmess.appendChild(Mes);
+                }
+
+                
+
+            }
+        }
+
+        inputMessage(messages, users, userPhone, choose_user_phone);
+
+
+        });
+    </script>
 {% endblock %}

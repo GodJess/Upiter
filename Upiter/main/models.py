@@ -135,3 +135,17 @@ class ImageTransfers(models.Model):
         class Meta: 
             verbose_name = "Картинки"
             verbose_name_plural = "Картинки"
+
+class Messenger(models.Model):
+    Sender = models.CharField("Отправитель", max_length = 100)
+    Recipient = models.CharField("Получатель", max_length = 100)
+    message = models.TextField("Текст сообщения", max_length = 1000)
+    Date = models.DateField("Дата отправки")
+    Time = models.TimeField("Время отправки")
+
+    def __str__(self):
+        return self.Sender
+    
+    class Meta: 
+        verbose_name = "Сообщения"
+        verbose_name_plural = "Сообщение"

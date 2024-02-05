@@ -633,11 +633,8 @@ body{
   height: auto;
   flex-wrap: wrap; 
 }
-/* .upitermain.open, .upiterhistory.open,
-.upitertransfer.open, .upitermesseg.open, .transaction.open {
+/* .upitermain.open, .transaction.open {
+  position: absolute;
   opacity: 1;
   transform: scale(1);
-} */
-/* Страница с историей переводов */
-
-
+}   */

@@ -160,22 +160,55 @@
     color: #0D0D0D;
     outline: none;
   }
+  .block-transac-analitic{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+  }
   .block-transactions{
     display: flex;
-    width: 100%;
-    height: 400px;
+    width: 70%;
+    min-width: 800px;
+    height: 500px;
     flex-wrap: wrap;
     margin-top: 20px;
     justify-content: center;
     overflow-y: auto;
     background-color: white;
     scroll-snap-type: mandatory;
+    border-radius: 20px;
   }
+  .block-diagrams{
+    width: 29%;
+    min-width: 300px;
+    height: 500px;
+    display: flex;
+    background-color: #0D0D0D;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border-top-right-radius: 70px;
+    border-bottom-left-radius: 70px;
+  }
+  #myChart{
+    width: 200px;
+    height: 200px;
+  }
+  .circle{
+    display: flex;
+    width: 90%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+  }
+
   .transactions{
     margin-left: 20px;
     display: flex;
     width: 80%;
-    height: 100px;
+    min-width: 710px;
+    height: 90px;
     margin-top: 20px;
     border: solid  2px #0D0D0D;
     flex-wrap: nowrap;
@@ -821,4 +854,32 @@
 }
 .SelectorCard.press{
   opacity: 1;
+}
+
+@media(max-height: 900px){
+  .block-transactions{
+    display: flex;
+    width: 70%;
+    min-width: 600px;
+    height: 400px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    justify-content: center;
+    overflow-y: auto;
+    background-color: white;
+    scroll-snap-type: mandatory;
+  }
+
+  .block-diagrams{
+    width: 29%;
+    min-width: 300px;
+    height: 400px;
+    display: flex;
+    background-color: #0D0D0D;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border-top-right-radius: 70px;
+    border-bottom-left-radius: 70px;
+  }
 }
