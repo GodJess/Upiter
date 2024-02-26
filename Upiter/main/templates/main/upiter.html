@@ -7,77 +7,83 @@
         <div class="greeting"><h1>Welcome {% for el in usersess %}{{el.name}}! {% endfor%}</h1></div>
         {% comment %} Блок с картами {% endcomment %}
         <div class="card-block">
+            <div class="content-card">
+                <div class="card debit">
+                    <div class="card-main">
+                        <div class="card-header">
+                            <div class="card-name" ><p>{{debitcard.CardName}}</p></div>
+                            <div class="numberOfcard"><p class="ppp" data-value="{{debitcard.numbercard}}" id ="numbercard"></p></div>
+                        </div>
+                        <div class="card-check">
+                            <p class="valuta">$</p>
+                            <p class="money">{{debitcard.Check}}</p>
+                        </div>
+                        <div class="footer-card">
+                            <div class="cash-back">
+                                <img src="{{debitcard.ImageCB.url}}" alt="">
+                                <p>{{debitcard.CashBack}}</p>
+                            </div>
+                            <div class="payment-system">
+                                <img src="{{debitcard.ImagePaymentSys.url}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="card debit">
-                <div class="card-main">
-                    <div class="card-header">
-                        <div class="card-name" ><p>{{debitcard.CardName}}</p></div>
-                        <div class="numberOfcard"><p class="ppp" data-value="{{debitcard.numbercard}}" id ="numbercard"></p></div>
-                    </div>
-                    <div class="card-check">
-                        <p class="valuta">$</p>
-                        <p class="money">{{debitcard.Check}}</p>
-                    </div>
-                    <div class="footer-card">
-                        <div class="cash-back">
-                            <img src="{{debitcard.ImageCB.url}}" alt="">
-                            <p>{{debitcard.CashBack}}</p>
+            <div class="content-card">
+                <div class="card credit">
+                    <div class="card-main">
+                        <div class="card-header">
+                            <div class="card-name" ><p>{{creditcard.CardName}}</p></div>
+                            <div class="numberOfcard"><p class="ppp" data-value ="{{creditcard.numbercard}}" id ="numbercard"></p></div>
                         </div>
-                        <div class="payment-system">
-                            <img src="{{debitcard.ImagePaymentSys.url}}" alt="">
+                        <div class="card-check">
+                            <p class="valuta">$</p>
+                            <p class="money">{{creditcard.Check}}</p>
+                        </div>
+                        <div class="footer-card">
+                            <div class="cash-back credits">
+                                <img src="{{creditcard.ImageCB.url}}" alt="">
+                                <p>{{creditcard.CashBack}}</p>
+                            </div>
+                            <div class="payment-system">
+                                <img src="{{creditcard.ImagePaymentSys.url}}" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card credit">
-                <div class="card-main">
-                    <div class="card-header">
-                        <div class="card-name" ><p>{{creditcard.CardName}}</p></div>
-                        <div class="numberOfcard"><p class="ppp" data-value ="{{creditcard.numbercard}}" id ="numbercard"></p></div>
-                    </div>
-                    <div class="card-check">
-                        <p class="valuta">$</p>
-                        <p class="money">{{creditcard.Check}}</p>
-                    </div>
-                    <div class="footer-card">
-                        <div class="cash-back credits">
-                            <img src="{{creditcard.ImageCB.url}}" alt="">
-                            <p>{{creditcard.CashBack}}</p>
+            <div class="content-card">
+                {% if platinumcard != 0 %}
+                <div class="card platinum">
+                    <div class="card-main">
+                        <div class="card-header">
+                            <div class="card-name" ><p>{{platinumcard.CardName}}</p></div>
+                            <div class="numberOfcard"><p class="ppp" data-value ="{{platinumcard.numbercard}}"></p></div>
                         </div>
-                        <div class="payment-system">
-                            <img src="{{creditcard.ImagePaymentSys.url}}" alt="">
+                        <div class="card-check">
+                            <p class="valuta">$</p>
+                            <p class="money">{{platinumcard.Check}}</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            {% if platinumcard != 0 %}
-            <div class="card platinum">
-                <div class="card-main">
-                    <div class="card-header">
-                        <div class="card-name" ><p>{{platinumcard.CardName}}</p></div>
-                        <div class="numberOfcard"><p class="ppp" data-value ="{{platinumcard.numbercard}}"></p></div>
-                    </div>
-                    <div class="card-check">
-                        <p class="valuta">$</p>
-                        <p class="money">{{platinumcard.Check}}</p>
-                    </div>
-                    <div class="footer-card">
-                        <div class="cash-back ">
-                            <img src="{{platinumcard.ImageCB.url}}" alt="">
-                            <p>{{platinumcard.CashBack}}</p>
-                        </div>
-                        <div class="payment-system">
-                            <img src="{{platinumcard.ImagePaymentSys.url}}" alt="">
+                        <div class="footer-card">
+                            <div class="cash-back ">
+                                <img src="{{platinumcard.ImageCB.url}}" alt="">
+                                <p>{{platinumcard.CashBack}}</p>
+                            </div>
+                            <div class="payment-system">
+                                <img src="{{platinumcard.ImagePaymentSys.url}}" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <div class="card addplatinum">
+                    <div class="card-main"></div>
+                </div>
+                {% endif %}
             </div>
-            {% else %}
-            <div class="card addplatinum">
-                <div class="card-main"></div>
-            </div>
-            {% endif %}
         </div>
         {% comment %} Конец блока крат {% endcomment %}
         <div class = "QuickTransfer">

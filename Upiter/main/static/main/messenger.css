@@ -86,11 +86,19 @@
     justify-content: space-between;
     border-bottom: solid 1px rgb(167, 167, 167);
   }
+  .block-user-messeg.active{
+    background-color: #000000;
+    color: #F2F2F2;
+  }
+  .block-user-messeg.active .masseg-description .messege-name-data p, .block-user-messeg.active .masseg-description .last-messege p{
+    color: #F2F2F2;
+  }
   .messege-user-image{
     width: 62px;
     height: auto;
     border-radius: 50%;
     border: #E5FF21 solid 4px;
+    background-color: #F2F2F2;
   }
   .masseg-description{
     display: flex;
@@ -152,6 +160,7 @@
   }
   .my-messages-blk{
     display: flex;
+    position: relative;
     width: 90%;
     height: auto;
     padding: 0px 0px;
@@ -168,19 +177,31 @@
   }
   .user-messages-blk .mess-data{
     display: block;
+    position: relative;
     background-color: #0D0D0D;
     color: #ffffff;
-    padding: 20px 10px;
+    padding: 20px 20px;
     font-size: 25px;
   }
+  .user-messages-blk .mess-data .time-mess{
+    color: #F2F2F2;
+    font-size: 18px;
+  }
+
+  .my-messages-blk .mess-data .time-mess{
+    color: #0D0D0D;
+    font-size: 18px;
+  }
+
   .mess-data p{
     margin: 0px;
   }
   .my-messages-blk .mess-data{
+    position: relative;
     display: block;
     background-color: #ffffff;
     color: #0D0D0D;
-    padding: 20px 10px;
+    padding: 20px 20px;
     font-size: 25px;
   }
   .mess-img-user{
@@ -322,6 +343,13 @@
     opacity: 0.3;
   }
 
+  .time-mess{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 5px;
+    margin-right: 5px;
+  }
 
   @media(max-height: 900px){
     .block-messeg{
@@ -353,3 +381,4 @@
       margin-bottom: 20px;
     }
   }
+

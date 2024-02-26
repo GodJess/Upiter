@@ -18,16 +18,11 @@
             </div>
             <div class="list">
 
-
-
-
             </div>
         </div>
         <div class="main-messeg">
             
             <div class="realtime-messege-users">
-
-
 
             </div>
             <div class="block-input-information">
@@ -35,16 +30,16 @@
                     <form class="block-clip" action="">
                         <button class="paper-clip" type="button"><ion-icon class="clip" name="attach-outline"></ion-icon></button>
                     </form>
-                    <form  class="block-inp-mes" action="{%  url 'addMessage' %}" method="post">
+                    <form  id="messageForm" class="block-inp-mes" >
                         {% csrf_token %}
                         <!-- <input class="input-messege"  type="text" placeholder="Enter text">  -->
-                        <textarea class="input-messege" placeholder="Enter text" name="text" id="" cols="30" rows="30"></textarea>
+                        <textarea class="input-messege" placeholder="Enter text" name="text" id="text" cols="30" rows="30"></textarea>
                         <input class="inp" id="dateInput" type="date" name="date" readonly>
                         <input class="inp" id="timeInput" type="time" name="time" readonly>
-                        <button type="submit" class="send-submit">Send</button>
+                        <button type="button" class="send-submit">Send</button>
                     </form>
                     <form class="block-micro" action="">
-                        <button class="button-micro" type="button"><ion-icon class="micro" name="mic-outline"></ion-icon></button>
+                        <button class="button-micro" type="submit"><ion-icon class="micro" name="mic-outline"></ion-icon></button>
                     </form>
                 </div>
             </div>
@@ -55,6 +50,11 @@
 {% endblock %}
 
 {% block script%}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script>
+
+    </script>
+
     <script>
     window.onload = function() {
         var element = document.querySelector('.realtime-messege-users');
@@ -75,6 +75,8 @@
         var users = {{ serialized_users | safe }}
         var userName = {{ userName | safe}}
         var userPhone = {{ userPhone | safe }}
+        var choose_user_phone = {{ choose_user_phone | safe}}
+        var messages = {{ message | safe}} 
 
         function getCSRFToken() {
             return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
@@ -99,18 +101,51 @@
             });
         }
 
+        
+
         document.addEventListener('DOMContentLoaded', function() {
-            const  displayUsers = () =>{
-                var list = document.querySelector(".list");
-                list.innerHTML = "";
-                for(var i = 0; i < users.length; i++){
-                    var user = users[i];
-                    
-                    CheckUser(user, list, userName, userPhone);
-                      
+
+            const ActiveUser = (phone, choose_user_phone) =>{
+                active = "";
+                if(phone == choose_user_phone){
+                    active = "active";
                 }
+                return active;
+            }
+            const lastMessage = (phone, userPhone, messages) =>{
+                var mess = "";
+                for(var i = 0; i < messages.length; i++){
+                    message = messages[i];
+                    if((message.Sender == userPhone && message.Recipient == phone) || (message.Sender == phone && message.Recipient == userPhone)){
+                        mess = "";
+                        mess = message.message.substring(0, 15) + "..";
+                    }
+                }
+                console.log(mess)
+                return mess;
+            }
+
+            const lastDate = (phone, userPhone, messages) =>{
+                var dates = "2023-12-31";
+                messages.forEach(message =>{
+                    if((message.Sender == userPhone && message.Recipient == phone) || (message.Sender == phone && message.Recipient == userPhone)){
+                        dates = message.Date;
+                    }
+                })
+                var itog = "" + dates.substring(dates.length - 2) + "." + dates.substring(5, 7) + "." + dates.substring(2, 4);
+                return itog;
             }
             
+        const  displayUsers = () =>{
+            var list = document.querySelector(".list");
+            list.innerHTML = "";
+            for(var i = 0; i < users.length; i++){
+                var user = users[i];
+                CheckUser(user, list, userName, userPhone, choose_user_phone);
+                  
+            }
+        }
+
             const  SearchdisplayUsers = (el) =>{
                 var list = document.querySelector(".list");
                 list.innerHTML = "";
@@ -118,27 +153,28 @@
                     var user = users[i];
                     if(el.startsWith("8")){
                         if(user.phone.includes(el)){
-                            CheckUser(user, list, userName, userPhone);
+                            CheckUser(user, list, userName, userPhone, choose_user_phone);
                         }
                     }
                     else{
                         if(user.name.includes(el)){
-                            CheckUser(user, list, userName, userPhone);
+                            CheckUser(user, list, userName, userPhone, choose_user_phone);
                         }
                     }
                       
                 }
             }
-            const CheckUser = (user, list, userName, userPhone) =>{
+            const CheckUser = (user, list, userName, userPhone, choose_user_phone) =>{
                 if(user.name == userName && user.phone == userPhone){
                     var img = "https://cdn.icon-icons.com/icons2/903/PNG/512/bookmark_icon-icons.com_69556.png";
-                    name = "Saved";
+                    name = "Saved";  
                 }
                 else{
                     var img = user.photo;
                     name = user.name;
                 }
-                selectUsers( user, list, img, name);
+                active = ActiveUser(user.phone, choose_user_phone);
+                selectUsers( user, list, img, name, active, userPhone);
             }
             document.querySelector(".formSearch").addEventListener("input", (event)=>{
                 event.preventDefault();
@@ -151,18 +187,25 @@
                 }
             } )
 
-            const selectUsers = (user, list, img, name) =>{
+            const selectUsers = (user, list, img, name, active, userPhone) =>{
                 var UserBlock = document.createElement('div');
-                UserBlock.className = "block-user-messeg";
+                if(active == "active"){
+                    UserBlock.className = "block-user-messeg active";
+                }
+                else{
+                    UserBlock.className = "block-user-messeg";
+                }
+                mess = lastMessage(user.phone, userPhone , messages);
+                dateMessage = lastDate(user.phone, userPhone , messages);
                 UserBlock.innerHTML = 
                         '<img class="messege-user-image" src="' + img + '" alt="">' +
                         '<div class="masseg-description">' +
                             '<div class="messege-name-data">' +
                                 '<p>'+ name + '</p>' +
-                                '<p>01.02.23</p>' +
+                                '<p>' + dateMessage + '</p>' +
                             '</div>' +
                             '<div class="last-messege">' +
-                                '<p>Hey, give me $43</p>' +
+                                '<p>'+ mess +'</p>' +
                             '</div>' +
                         '</div>' +
                         '<div class="block-submit">' +
@@ -182,17 +225,75 @@
 
         });
     </script>
+    <script>             
+       {% comment %} let chatSocket = null;
+
+            function connectWebSocket() {
+                chatSocket = new WebSocket('ws://localhost:8000/ws/main/');
+                
+                chatSocket.onopen = function(event) {
+                    console.log('WebSocket connection established');
+                    
+                    const sendButton = document.querySelector('.send-submit');
+                    sendButton.addEventListener('click', function() {
+                        var messageText = document.querySelector('.input-messege').value;
+                        var date = document.getElementById("dateInput").value;
+                        var time = document.getElementById("timeInput").value;
+                        console.log("Проверяем данные на сериализуемость");
+                        console.log(userPhone);
+                        console.log(choose_user_phone);
+                        const messageData = {
+                            text: messageText,
+                            date: date,
+                            time: time,
+                            sender: userPhone,
+                            recipient: choose_user_phone
+                        };
+                        chatSocket.send(JSON.stringify(messageData));
+                        document.querySelector('.input-messege').value = '';
+                    });
+                };
+        
+                chatSocket.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    const message_send_user = data.message_send_user;
+                    const message_get_user = data.message_get_user;
+                    console.log(message_send_user);
+                    console.log(message_get_user);
+                    // Обработка полученных сообщений
+                };
+        
+                chatSocket.onclose = function(event) {
+                    console.log('WebSocket connection closed');
+                    // Пытаемся переподключиться через 3 секунды
+                    setTimeout(function() {
+                        connectWebSocket();
+                    }, 3000);
+                };
+            }
+        
+            connectWebSocket(); {% endcomment %}
+    </script> 
     <script>
-        var users = {{ serialized_users | safe }}
-        var userName = {{ userName | safe}}
         var userPhone = {{ userPhone | safe }}
         var choose_user_phone = {{ choose_user_phone | safe}}
+        var users = {{ serialized_users | safe }}
+        var userName = {{ userName | safe}}
         var message_send_user = {{ message_send_user | safe}}
-        var message_get_user = {{ message_get_user | safe}}
-
-        if(userPhone)
+        var message_get_user = {{ message_get_user | safe}}  
+       
 
         document.addEventListener('DOMContentLoaded', function() {
+        
+            const SetSendMassage = (el) =>{
+                message_send_user = el;
+            }
+    
+            const SetGetMassage = (el) =>{
+                message_get_user = el;
+            }
+    
+
         var filter_message1 = [];
         var filter_message2 = [];
 
@@ -202,38 +303,73 @@
             }
         }
 
-
         JoinMessage(message_get_user);
         JoinMessage(message_send_user);
-        console.log(filter_message1);
 
-        for(var i = 0; i < filter_message1.length; i++){
-            if (filter_message2.some(item => item.id === filter_message1[i].id)) {
-                continue;
-            } else {
-                filter_message2.push(filter_message1[i]);
+        function filter2(filter_message1){
+            for(var i = 0; i < filter_message1.length; i++){
+                if (filter_message2.some(item => item.id === filter_message1[i].id)) {
+                    continue;
+                } else {
+                   filter_message2.push(filter_message1[i]);
+                 }
             }
         }
+        filter2(filter_message1);
 
-        const sortByDateTime = (el) => {
-            return el.sort((a, b) => {
-                if(a.Date > b.Date){
-                    return 1;
-                }
-                if(a.Date < b.Date){
-                    return -1 ;
-                }
-                if(a.Time > b.Time){
-                    return 1;
-                }
-                if(a.Time < b.Time){
-                    return -1;
-                }
-            })
-        }
+            const sortByDateTime = (el) => {
+                return el.sort((a, b) => {
+                    if(a.Date > b.Date){
+                        return 1;
+                    }
+                    if(a.Date < b.Date){
+                        return -1 ;
+                    }
+                    if(a.Time > b.Time){
+                        return 1;
+                    }
+                    if(a.Time < b.Time){
+                        return -1;
+                    }
+                })
+            }
 
         var messages = sortByDateTime(filter_message2);
         console.log(messages);
+
+        $(document).ready(function() {
+            $('.send-submit').click(function(e) {
+                e.preventDefault();
+                var text = $('#text').val();
+                var date = $('#dateInput').val();
+                var time = $('#timeInput').val();
+                
+                document.querySelector('.input-messege').value = '';
+                $.ajax({
+                    method: 'POST',
+                    url: "{% url 'addMessage' %}",
+                    data: {
+                        text: text,
+                        date: date,
+                        time: time,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function(response) {
+                       //window.location.href = "{% url 'messenger' %}";
+                       //JoinMessage(response.new_message_send);
+                       //JoinMessage(response.new_message_get);
+                       //filter2(filter_message1);
+                       //messages = sortByDateTime(filter_message2);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }); 
+        console.log(filter_message1);
+
+       
 
         const LoadIMG = (users, el) => {
             var img = 0;
@@ -247,6 +383,15 @@
             return img;
         }
         
+        const TimeSet = ()=>{
+            var times = document.querySelectorAll('.time-mess');
+            times.forEach(time => {
+                var set = time.getAttribute('data-time').substring(0, 5);
+                time.textContent = set;
+            });
+            
+        }
+
         const inputMessage = (messages, users, userPhone, choose_user_phone) =>{
             var listmess = document.querySelector(".realtime-messege-users");
             listmess.innerHTML = "";
@@ -260,6 +405,7 @@
                     Mes.innerHTML =  
                         '<div class="mess-data">' +
                             '<p>' + message.message + '</p>' +
+                            '<div class="time-mess" data-time = "'+ message.Time +'">'+ '</div>'+
                         '</div>' +
                         '<img class="mess-img-user" src="'+ img + '" alt="">';
                     listmess.appendChild(Mes);
@@ -278,16 +424,23 @@
                         '<img img class="mess-img-user" width="80px" height="80px" src="'+ img +'" alt="">' +
                         '<div class="mess-data">' +
                             '<p>' + message.message + '</p>' +
+                            '<div class="time-mess" data-time = "'+ message.Time +'">'+ '</div>'+
                         '</div>'
+
                     listmess.appendChild(Mes);
                 }
 
                 
 
             }
+            TimeSet();
         }
 
+
+
         inputMessage(messages, users, userPhone, choose_user_phone);
+        TimeSet();
+
 
 
         });

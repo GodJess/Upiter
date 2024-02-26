@@ -5,6 +5,8 @@ from main.models import Users, DebitCard, CreditCard, PlatinumCard, Transfer, Tr
 from .serializers import serialize_user_data, UserImage, SerializeTransfers, SerializeImages, SerlMessage
 from django.views.decorators.csrf import requires_csrf_token
 import json
+from django.http import JsonResponse
+
 # Create your views here.
 def slider(request):
     delSession(request)
@@ -169,8 +171,8 @@ def messenger(request):
     choose_user_phone = ""
     message_send_user =""
     message_get_user =""
-    phones = ""
     choose_user_phones = ""
+    phones = ""
 
     if len(usersess) > 0:
         serialized_users = json.dumps(UserImage(Users.objects.all(), many=True).data)
@@ -188,10 +190,11 @@ def messenger(request):
 
     message_send_user = json.dumps(SerlMessage(Messenger.objects.filter(Sender = choose_user_phones, Recipient = phones ), many = True).data)
     message_get_user = json.dumps(SerlMessage(Messenger.objects.filter(Sender = phones, Recipient = choose_user_phones ), many = True ).data)
+    message = json.dumps(SerlMessage(Messenger.objects.filter(), many = True ).data)
 
     data ={
         "usersess": usersess, "length": length, "serialized_users": serialized_users, "userName": userName, "userPhone": userPhone, "choose_user_phone": choose_user_phone,
-        "message_send_user" : message_send_user, "message_get_user": message_get_user,
+        "message_send_user" : message_send_user, "message_get_user": message_get_user, 'message': message
     }
     return render(request, "main/messenger.html", data)
 
@@ -212,21 +215,34 @@ def SetUsers(request):
     return redirect("messenger")
 
 def addMessage(request):
-    choose_user = request.session.get(settings.MESSEGE_CHOOSE_USER, {})
-    usersess = request.session.get(settings.SESSION_USER, {})
-    if request.method == "POST":
+    if request.method == "POST" and request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        choose_user = request.session.get(settings.MESSEGE_CHOOSE_USER, {})
+        usersess = request.session.get(settings.SESSION_USER, {})
+        negative = True
         text = request.POST.get("text")
         date = request.POST.get("date")
         time = request.POST.get("time")
+        for el in text:
+            if el == " ":
+                negative =False
+            else:
+                break    
 
-        for el in choose_user:
-            recipient = el['phones']
-        for user in usersess:
-            sender = user['numberphone']
-            message = Messenger(Sender=sender, Recipient=recipient, message=text, Date=date, Time=time)
-            message.save()
+        if(len(text) > 0 and negative):
+            for el in choose_user:
+                recipient = el['phones']
+            for user in usersess:
+                sender = user['numberphone']
+                message = Messenger(Sender=sender, Recipient=recipient, message=text, Date=date, Time=time)
+                message.save()
+                message_send_user = SerlMessage(Messenger.objects.filter(Sender = recipient, Recipient = sender ), many = True)
+                message_get_user = SerlMessage(Messenger.objects.filter(Sender = sender, Recipient = recipient ), many = True )
 
-    return redirect("messenger")
+        return JsonResponse({'success': 'Message added successfully.', "new_message_send": message_send_user, "new_message_get": message_get_user})
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=400)            
+
+    # return redirect("messenger")
 
 def exit(request):
     delSession(request)
@@ -382,5 +398,6 @@ def Completion(where,summ ,el2):
 
     PayWhere.Check = float(PayWhere.Check) + float(summ)
     PayWhere.save()
+
 
 
